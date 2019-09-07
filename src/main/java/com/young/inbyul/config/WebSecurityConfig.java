@@ -54,10 +54,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         
 		http.httpBasic()
 				.and()
-			.authorizeRequests()
+			.authorizeRequests() //먼저 선언된게 우선순위가 높다.
 				.antMatchers("/resources/**").permitAll()
-				.antMatchers("/**").permitAll()
-				//.antMatchers("/admin/**").hasRole("ADMIN")
+				.antMatchers("/user/**","/","/restuser/**").permitAll()
+				.antMatchers("/**").hasRole("USER")
 				//.antMatchers("/db/**").access("hasRole('ADMIN') and hasRole('DBA')")
 				.and()
 			.formLogin()

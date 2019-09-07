@@ -27,6 +27,6 @@ public class SecurityCustomUser extends User{
 		return list;
 	}
 
-
+	
 
 }

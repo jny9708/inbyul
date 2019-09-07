@@ -4,128 +4,13 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.young.inbyul.user">
 
-	<!-- <parameterMap type="" id="">
-		<parameter property=""/>
-	</parameterMap> -->
-	
-	 <select id="selectUserById" resultType="com.young.inbyul.user.model.CustomUser" parameterType="String">
-			        
-	            SELECT
-	                *
-	            FROM
-	                user
-	            WHERE
-	            <if test="@com.young.inbyul.user.service.CustomUserDetailsService@regexp_Email_Check(value)"> 
-	                uemail=
-	        	</if>
-	        	<if test="!@com.young.inbyul.user.service.CustomUserDetailsService@regexp_Email_Check(value)">
-	        		uid=
-	        	</if>
-	        	#{loginid}
-    </select>
-    
-    <select id="getRoleById" resultType="com.young.inbyul.user.model.UserRole">
-    	select rolename from role where uno = #{loginid}
-    </select>
-    
-    <insert id="insertUser">
-    	<![CDATA[
-	    	INSERT INTO USER(uid,upw,uemail,uphone,uname)
-	    	 VALUES
-	    	(
-	    	#{uid}
-	    	,#{upw}
-	    	,#{uemail}
-	    	,#{uphone}
-	    	,#{uname}
-	    	)
-    	]]>
-    </insert>
-    
-    <insert id="insertRole">
-    	
-    		INSERT INTO ROLE (rolename, uno) 
-    		VALUES
-    		<foreach collection="roles" item="roles" separator="," open="(" close=")">
-    		#{roles.rolename},#{uno}
-    		</foreach>
-    		
-    	
-    </insert>
-    
-    <insert id="createAuthKey">
-    	<![CDATA[
-    		INSERT INTO EMAILAUTH(uno,authkey)
-    		 VALUES
-	    	(
-	    	#{uno}
-	    	,#{authKey}
-	    	)
-    	]]>
-    </insert>
-    
-    <select id="getAuthKey" resultType="String">
-    	<![CDATA[
-    		SELECT 
-    			AUTHKEY 
-    		FROM 
-    			EMAILAUTH 
-    		WHERE
-    			UNO = #{uno} 
-    	]]>
-    </select>
-    
-    <update id="updateRole">
-    	<![CDATA[
-    		UPDATE
-    			ROLE 
-    		SET 
-    			ROLENAME = #{ch_role}
-    		WHERE 
-    			UNO= #{uno}
-    	]]>
-    </update>
-    
-    <delete id="deleteAuthKey">
-    	<![CDATA[
-    		DELETE FROM EMAILAUTH WHERE UNO = #{uno}
-    	]]>
-    </delete>
-    
-    <select id="getUid" resultType="String">
-    	<![CDATA[
-    		SELECT 
-    			uid 
-    		FROM 
-    			USER 
-    		WHERE 
-    			uid = #{uid}
-    	]]>
-    </select>
-    
-    <select id="getUemail" resultType="String">
-	    <![CDATA[
-	    	SELECT 
-	    		uemail 
-	    	FROM 
-	    		USER 
-	    	WHERE 
-	    		uemail = #{uemail}
-	    ]]>
-    </select>
-    
-    <select id="getUno" resultType="int">
-    	<![CDATA[
-	    	SELECT 
-	    		uno 
-	    	FROM 
-	    		USER 
-	    	WHERE 
-	    		uid = #{uid}
-	    ]]>
-    
-    </select>
-    
-    
-    
+
+	<select id="getFollowingCount">
+		 select
+		  	count(*)  
+		 from 
+		 	follow 
+		 where 
+		 	following_no = #{uno}
+	</select>
 </mapper>

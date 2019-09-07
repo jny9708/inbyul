@@ -14,14 +14,16 @@ public class UserRepository {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 	
-	String namespace = "com.young.inbyul.user";
+	String namespace = "com.young.inbyul.login";
 	
 	public CustomUser getUserById(String loginid){
-		return sqlSession.selectOne(namespace + ".selectUserById",loginid);
+		Map<String, Object> map = new HashMap<>();
+		map.put("loginid",loginid);
+		return sqlSession.selectOne(namespace + ".selectUserById",map);
 	}
 	
-	public List<UserRole> getRoleById(String loginid){
-		return sqlSession.selectList(namespace + ".getRoleById", loginid);
+	public List<UserRole> getRoleById(int uno){
+		return sqlSession.selectList(namespace + ".getRoleById", uno);
 	}
 	
 	public int insertUser(CustomUser customUser) throws Exception {

@@ -38,17 +38,19 @@ public class CustomUserDetailsService implements UserDetailsService {
 	@SuppressWarnings("unused")
 	@Override
 	public UserDetails loadUserByUsername(String loginid) throws UsernameNotFoundException {
-		System.out.println(loginid);
+		System.out.println(loginid+"??");
 		CustomUser customUser = userRepository.getUserById(loginid);
-		List<UserRole> roles =userRepository.getRoleById(loginid);		
+		List<UserRole> roles =userRepository.getRoleById(customUser.getUno());		
 		customUser.setRoles(roles);
 		if(customUser==null) throw new UsernameNotFoundException("아이디 혹은 비밀번호를 잘 못 입력 하셨습니다.");
 		return new SecurityCustomUser(customUser);
 	}
 	
 	public static boolean regexp_Email_Check(String loginid) {
+		System.out.println(loginid+"!!!");
 		String regExp_email="^[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*\\.[a-zA-Z]{2,3}$";
 		boolean result = loginid.matches(regExp_email);
+		logger.info(result+"!");
 		return result;
 	}
 	

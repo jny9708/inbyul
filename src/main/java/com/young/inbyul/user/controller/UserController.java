@@ -48,7 +48,7 @@ public class UserController {
 		
 	}
 	
-	@RequestMapping(value="/emailconfirm" , method=RequestMethod.POST)
+	@RequestMapping(value="/emailconfirm" , method=RequestMethod.GET)
 	public String emailConfirm(RedirectAttributes redirectAttributes,@RequestParam("uno") int uno
 								,@RequestParam("key") String key ) throws Exception {
 		int result =-1;

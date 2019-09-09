@@ -43,7 +43,13 @@ public class CustomUserDetailsService implements UserDetailsService {
 		List<UserRole> roles =userRepository.getRoleById(customUser.getUno());		
 		customUser.setRoles(roles);
 		if(customUser==null) throw new UsernameNotFoundException("아이디 혹은 비밀번호를 잘 못 입력 하셨습니다.");
-		return new SecurityCustomUser(customUser);
+		SecurityCustomUser securityCustomUser = new SecurityCustomUser(customUser);
+		securityCustomUser.setUno(customUser.getUno());
+		securityCustomUser.setUname(customUser.getUname());
+		securityCustomUser.setUemail(customUser.getUemail());
+		securityCustomUser.setUphone(customUser.getUphone());
+		securityCustomUser.setUicon(customUser.getUicon());
+		return securityCustomUser;
 	}
 	
 	public static boolean regexp_Email_Check(String loginid) {

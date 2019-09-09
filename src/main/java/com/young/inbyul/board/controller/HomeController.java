@@ -16,12 +16,22 @@ public class HomeController {
 	private BoardService boardService;
 	
 	@RequestMapping("/home")
-	public String home(@AuthenticationPrincipal SecurityCustomUser customUser,Model model) throws Exception{
+	public String home(@AuthenticationPrincipal SecurityCustomUser securityCustomUser,Model model) throws Exception{
 //		System.out.println(customUser.getUno()+"?!a");
-//		System.out.println(customUser.getUid()+"?!a!");
-//		int following_count = boardService.getFollowingCount(customUser.getUno());
-//		model.addAttribute("customUser",customUser);
-//		model.addAttribute("following_count", following_count);
-		return "home/home";
+//		System.out.println(customUser.getUname()+"?!a!");
+//		int following_count = boardService.getFollowingCount(securityCustomUser.getUno());
+//		if(following_count < 1) {
+//			model.addAttribute("ReUserList", boardService.getReUser());
+//		}
+		//유저 추천을 해줘야하는가?
+		boolean isRecomendUser = boardService.checkRecommendUser(securityCustomUser.getUno());
+		model.addAttribute("isRecomendUser", isRecomendUser);
+		return "board/home";
 	}
+	
+	@RequestMapping("/writeform")
+	public String writeform() throws Exception{
+		return "board/write";
+	}
+	
 }

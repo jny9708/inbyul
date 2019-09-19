@@ -23,8 +23,7 @@ import com.young.inbyul.user.service.CustomUserDetailsService;
 @EnableWebSecurity
 @ComponentScan(basePackages = {"com.young.inbyul"})
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-	@Autowired
-	private DataSource dataSource;
+	
 	
 	
 	 @Autowired 

@@ -1,12 +1,15 @@
 package com.young.inbyul.config;
 
+import java.util.Properties;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import java.util.Properties;
 
 @Configuration
+@EnableAspectJAutoProxy
 @ComponentScan(basePackages = {"com.young.inbyul"})
 public class RootConfig {
 	

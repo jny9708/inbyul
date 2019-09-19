@@ -29,9 +29,7 @@ public class HomeController {
 		return "board/home";
 	}
 	
-	@RequestMapping("/writeform")
-	public String writeform() throws Exception{
-		return "board/write";
-	}
+
+	
 	
 }

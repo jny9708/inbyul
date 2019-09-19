@@ -2,10 +2,13 @@ package com.young.inbyul.board.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.young.inbyul.board.service.BoardService;
 import com.young.inbyul.user.model.CustomUser;
@@ -14,6 +17,7 @@ import com.young.inbyul.user.model.CustomUser;
 @RequestMapping("/restboard")
 public class RestBoardController {
 
+	
 	@Autowired
 	private BoardService boardService;
 	
@@ -23,6 +27,19 @@ public class RestBoardController {
 	}
 	
 	//@RequestMapping(value="/getReList" ,method =RequestMethod.POST)
+	
+	@RequestMapping(value="/upload", method=RequestMethod.POST)
+	public String upload(MultipartHttpServletRequest request,
+            HttpServletResponse response) throws Exception{
+		 
+
+		if(request.getFileMap()!=null) {
+			boardService.insertBoard(request);
+		}		
+		 
+		 
+		return "board/home";
+	}
 	
 	
 }

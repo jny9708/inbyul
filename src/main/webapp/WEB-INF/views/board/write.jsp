@@ -1,21 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="_csrf" content="${_csrf.token}"/>
+	<!-- default header name is X-CSRF-TOKEN -->
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
 <jsp:include page="../layout/header.jsp"></jsp:include>
 <link href="${pageContext.request.contextPath}/resources/css/write.css" rel="stylesheet">
 <script src="${pageContext.request.contextPath}/resources/js/dropzone.js"></script>
 <title>Insert title here</title>
 </head>
+<c:url var="uploadURL" value="restboard/upload"/>
 <body>
-	
     <section class="m_container">
         <main class="m_container_f">
             <div class="write_container">
-                <form action="#">
+                
                 <div class="write_f">
                     <div class="write_s">
                         
@@ -23,12 +27,13 @@
                         
                     </div>
                     <div class="write_s">
-                        <textarea name="write_content"  placeholder="무슨 일이 일어나고 있나요?" class="autosize" ></textarea>
+                        <textarea name="write_content"  placeholder="무슨 일이 일어나고 있나요?" id="autosize" class="autosize" ></textarea>
                     </div>
                 </div>
                 <div class="write_f">
                     
-                    <div  class="dropzone" id="dropzoneFrom">
+                    <form  class="dropzone" id="dropzoneFrom" enctype="multipart/form-data" action=${uploadURL} >
+                    	
                         <!-- <div class="fallback">
                             <input name="file" type="file" multiple />
                         </div> -->
@@ -37,7 +42,7 @@
                             <span style="font-weight:bold;">여기에 사진을 놓거나 클릭하여 업로드하세요.</span>
                         </div>
                         </div>
-                    </div>
+                    </form>
                 
 
                     <div id="preview" style="display:none;">
@@ -51,7 +56,7 @@
                     </div>
                 </div>
                 
-            </form>
+            
             
         </div>
             <div class="btn-wrap">
@@ -68,16 +73,21 @@
         });
 
         Dropzone.options.dropzoneFrom = {
-            url:"/upload",
             autoProcessQueue: false,
             acceptedFiles:".png,.jpg,.gif,.bmp,.jpeg",
-            
+            uploadMultiple : true,
+            parallelUploads: 100,
+            /* headers: {
+                'X-CSRFToken': $('meta[name="_csrf"]').attr('content')
+            }, */            
             init: function(){
+            	
                 var submitButton = document.querySelector('#submit-all');
                 myDropzone = this;
                 submitButton.addEventListener("click", function(){
                     var count= myDropzone.files.length;
                     if(count>0){
+                    	console.log("pro");
                         myDropzone.processQueue();
                     }else{
                         Swal.fire({
@@ -89,15 +99,25 @@
                     }
                     
                 });
-                this.on("sending", function(file, xhr, formData){
-                    formData.append("filename", file.name);
-                    formData.append("write_content", $("#autosize").val);
-                });
+                
+                this.on("sendingmultiple", function(file, xhr, formData){
+                	xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+                    formData.append("write_content", document.getElementById("autosize").value);
+                    console.log(formData.get("write_content"));
                     
+                });
+
+              
+                    
+
+                this.on("completemultiple", function(){
+                	location.href='<c:url value="/home"/>'
+                }); 
+                
             },
              previewTemplate: document.querySelector('#preview').innerHTML
         };
-
+ 
         $(document).ready(function(){
 
         });

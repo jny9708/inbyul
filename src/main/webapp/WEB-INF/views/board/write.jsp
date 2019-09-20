@@ -27,16 +27,15 @@
                         
                     </div>
                     <div class="write_s">
-                        <textarea name="write_content"  placeholder="무슨 일이 일어나고 있나요?" id="autosize" class="autosize" ></textarea>
+                        <textarea name="bcontent"  placeholder="무슨 일이 일어나고 있나요?" id="autosize" class="autosize" ></textarea>
+                        <input type="hidden" value="<sec:authentication property="principal.uno"/>" name="uno" id="uno">
+                        
                     </div>
                 </div>
                 <div class="write_f">
                     
                     <form  class="dropzone" id="dropzoneFrom" enctype="multipart/form-data" action=${uploadURL} >
                     	
-                        <!-- <div class="fallback">
-                            <input name="file" type="file" multiple />
-                        </div> -->
                         <div class="message-wrap">
                         <div class="dz-default dz-message">
                             <span style="font-weight:bold;">여기에 사진을 놓거나 클릭하여 업로드하세요.</span>
@@ -102,9 +101,8 @@
                 
                 this.on("sendingmultiple", function(file, xhr, formData){
                 	xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
-                    formData.append("write_content", document.getElementById("autosize").value);
-                    console.log(formData.get("write_content"));
-                    
+                    formData.append("bcontent", document.getElementById("autosize").value);
+                    formData.append("uno", document.getElementById("uno").value);
                 });
 
               

@@ -19,12 +19,11 @@ public class CustomUser {
 	private String uicon;
 	private List<UserRole> roles;
 	
+	public int followercnt;
+	public int followingcnt;
 	
-//	public Collection<? extends GrantedAuthority> getAuthorities() {
-//		ArrayList<GrantedAuthority> auth = new ArrayList<GrantedAuthority>();
-//        auth.add(new SimpleGrantedAuthority(authority));
-//        return auth;
-//	}
+	
+
 	
 	
 }

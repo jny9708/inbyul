@@ -6,38 +6,23 @@
 
 
 	<select id="getFollowingCount" resultType="int">
-		 select
-		  	count(*)  
-		 from 
-		 	follow 
-		 where 
-		 	following_no = #{uno}
-	</select>
-	
-	<select id="getPopUserList" resultType="int">
-		 select 
-		 	follower_no,count(*) as follower_count 
-		 from 
-		 	follow 
-		 group by 
-		 	follower_no 
-		 order by 
-		 	follower_count desc limit 10;
+		select 
+			followingcnt 
+		from 
+			user 
+		where uno =#{uno};
 	</select>
 	
 	
 	<select id="getReUserList" resultType="com.young.inbyul.user.model.CustomUser">
 	
-		 select
-		 	* 
+		 select 
+		 	uicon,uid,uname 
 		 from 
 		 	user 
 		 where 
-		 	uno in 
-
-		 	<foreach collection="list" item="item" index="index" separator="," open="(" close=")">
-				#{item}
-		 	</foreach>
+		 	uno != #{uno} 
+		 order by followercnt desc limit 10;
 		
 	</select>
 	

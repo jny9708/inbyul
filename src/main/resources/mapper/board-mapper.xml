@@ -3,7 +3,76 @@
     PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.young.inbyul.board">
+	<resultMap type="com.young.inbyul.board.model.Board" id="boardList">
+		<result property="bno" column="bno"/>
+		<result property="bcontent" column="bcontent"/>
+		<result property="uno" column="uno"/>
+		<result property="likecnt" column="likecnt"/>
+		<result property="commentcnt" column="commentcnt"/>
+		<result property="b_reg_dt" column="b_reg_dt"/>
+		 <association property="user"  javaType="com.young.inbyul.user.model.CustomUser" >
+             <result property="uid" column="uid"/>
+             <result property="uicon" column="uicon"/>
+        </association>
+        <collection property="file_path" javaType="java.util.ArrayList" column="bno" ofType="String" select="getfilepath">
+        	<result property="file_path" column="file_path"/>
+        </collection>
+	</resultMap>
+
+
+
 	<select id="getUserBoardCount" resultType="int">
 		select count(*) from board where uno = #{uno}
 	</select>
+	
+	<insert id="insertBoard" useGeneratedKeys="true" keyProperty="bno" parameterType="com.young.inbyul.board.model.Board">
+		<![CDATA[
+			insert into board (bcontent,uno)
+			values
+			(
+			#{bcontent}
+			,#{uno}
+			)
+		]]>
+	</insert>
+	
+	<insert id="insertImages" parameterType="com.young.inbyul.board.model.Board">
+		insert into postimages(bno,file_path)
+		values
+		<foreach collection="file_path" item="item" index="index" separator=",">
+				(
+				#{bno}
+				,#{item}
+				)
+		 </foreach>
+	</insert> 
+	
+	<select id="getFollowerList" resultType="int">
+		select 
+			follower_no 
+		from 
+			follow 
+		where 
+			following_no = #{uno}
+	</select>
+	
+	<select id="getBoardList" resultMap="boardList">
+		select 
+			board.*,user.uid,user.uicon 
+		from 
+			board join user 
+		on 
+			board.uno=user.uno
+		where 
+			board.uno in (#{uno},
+		<foreach collection="followerList" item="item" index="index" separator=",">
+			#{item}
+		</foreach>	
+			);
+	</select>
+	
+	<select id="getfilepath" resultType="String">
+		 select file_path from postimages where bno = #{bno}
+	</select>
+	
 </mapper>

@@ -2,7 +2,8 @@
 <!DOCTYPE mapper
     PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.young.inbyul.board">
+<mapper namespace="com.young.inbyul.test">
+	
 	<resultMap type="com.young.inbyul.board.model.Board" id="boardList">
 		<result property="bno" column="bno"/>
 		<result property="bcontent" column="bcontent"/>
@@ -18,45 +19,10 @@
         	<result property="file_path" column="file_path"/>
         </collection>
 	</resultMap>
-
-
-
-	<select id="getUserBoardCount" resultType="int">
-		select count(*) from board where uno = #{uno}
-	</select>
 	
-	<insert id="insertBoard" useGeneratedKeys="true" keyProperty="bno" parameterType="com.young.inbyul.board.model.Board">
-		<![CDATA[
-			insert into board (bcontent,uno)
-			values
-			(
-			#{bcontent}
-			,#{uno}
-			)
-		]]>
-	</insert>
+		
 	
-	<insert id="insertImages" parameterType="com.young.inbyul.board.model.Board">
-		insert into postimages(bno,file_path)
-		values
-		<foreach collection="file_path" item="item" index="index" separator=",">
-				(
-				#{bno}
-				,#{item}
-				)
-		 </foreach>
-	</insert> 
-	
-	<select id="getFollowerList" resultType="int">
-		select 
-			follower_no 
-		from 
-			follow 
-		where 
-			following_no = #{uno}
-	</select>
-	
-	<select id="getBoardList" resultMap="boardList">
+	<select id = "getList" resultMap="board">
 		select 
 			board.*,user.uid,user.uicon 
 		from 
@@ -64,15 +30,26 @@
 		on 
 			board.uno=user.uno
 		where 
-			board.uno in (#{uno},
-		<foreach collection="followerList" item="item" index="index" separator=",">
-			#{item}
-		</foreach>	
-			);
+			board.uno in (11,1);
 	</select>
 	
 	<select id="getfilepath" resultType="String">
 		 select file_path from postimages where bno = #{bno}
 	</select>
+	
+	
+	<select id="getReUserList" resultType="com.young.inbyul.user.model.CustomUser">
+	
+		 select 
+		 	uicon,uid,uname 
+		 from 
+		 	user 
+		 where 
+		 	uno !=11 
+		 order by followercnt desc limit 10;
+		
+	</select>
+	
+	
 	
 </mapper>

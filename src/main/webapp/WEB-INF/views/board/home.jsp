@@ -70,16 +70,15 @@
              		
              })  
 	    }else{
-	    	 /* $.ajax({
+	    	 /*  $.ajax({
              	url:""
-             		,data : paramData
              		,type : 'POST'
              		,dataType : 'json'
                  	,beforeSend : function(xhr){
                  		xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
 	                    	}
              		,success : function(result){
-             			
+             				
              			}
              }) */
 	    }
@@ -91,6 +90,7 @@
     <section class="m_container">
         <main> 
             <section class="m_1" id="add_html" >
+            
             </section>
                 
             <aside class="m_1">
@@ -143,6 +143,8 @@
 		  </path>
 		</svg>
 	</div>
+	
+	
 	
 
 </body>

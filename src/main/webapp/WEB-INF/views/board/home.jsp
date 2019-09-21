@@ -16,6 +16,9 @@
 <c:url var="getReListURL" value="/restboard/getReList"></c:url>
 
 <c:url var="writeFormURL" value="/writeform"></c:url>
+<c:url var="getBorListURL" value="/restboard/getBorList"></c:url>
+
+
 <script>
 	$(document).ready(function(){
 	    var isRecomendUser = ${isRecomendUser};
@@ -70,19 +73,148 @@
              		
              })  
 	    }else{
-	    	 /*  $.ajax({
-             	url:""
+		    
+	    	   $.ajax({
+             	url:"${getBorListURL}"
              		,type : 'POST'
              		,dataType : 'json'
                  	,beforeSend : function(xhr){
                  		xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
 	                    	}
              		,success : function(result){
+                 		
+             			htmls+='<div>';
+
+             			$.each(result,function(){
+             			htmls+='<article class="art_f">';
+             			htmls+='<header  style="border-bottom: 1px solid #e6e6e6;">';
+             			htmls+='<div class="hea_f">';	  
+             			htmls+='<div class="hea_s">';                              
+             			htmls+='<div class="hea_t">';
+             			htmls+='<a href="#">';
+             			htmls+='<img src="${pageContext.request.contextPath}/resources/images/' + this.user.uicon + '" width="32px" height="32px"></img>';
+             			htmls+='</a>';
+             			htmls+='</div>';
+             			htmls+='<div class="hea_t">';
+             			htmls+='<span>' + this.user.uid + '</span>';
+             			htmls+='</div>';
+             			htmls+='</div>';
+             			htmls+='</div>';
+             			htmls+='</header>';
+
+             			if(this.file_path.length>1){
+                 			<!-- 사진이 여러장일때 캐러셀 -->
+             				htmls+='<div id="carouselExampleControls" class="carousel slide carousel_f" data-ride="carousel" data-pause="hover" data-interval="false" data-wrap="false" >';							
+             				htmls+='<div class="carousel-inner">';
              				
-             			}
-             }) */
+							$.each(this.file_path,function(i){
+								
+								if(i==0){
+								
+									htmls+='<div class="carousel-item active">';
+									htmls+='<img class="content d-block w-100" src="${pageContext.request.contextPath}'+this+'"  alt="...">';
+									htmls+='</div>';	
+								}else{
+								
+									htmls+='<div class="carousel-item">';
+									htmls+='<img src="${pageContext.request.contextPath}' + this + '" class="d-block w-100" alt="...">';
+									/* 갑자기 사진이 이상하게 뜨면 class에 content추가해보삼 */
+									htmls+='</div>';
+								}
+							})
+							htmls+='</div>';
+							htmls+='<a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">';
+							htmls+='<span class="carousel-control-prev-icon" aria-hidden="true"></span>';
+							htmls+='<span class="sr-only">Previous</span>';
+							htmls+='</a>';
+							htmls+='<a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">';
+							htmls+='<span class="carousel-control-next-icon" aria-hidden="true"></span>';
+							htmls+='<span class="sr-only">Next</span>';
+							htmls+='</a>';
+							htmls+='</div>';
+							<!-- 캐러셀 끝 -->
+                 		}else{
+                 			<!-- 사진이 한장일 때 -->
+                 			htmls+='<img class="content" src="../image/index_image.jpg" alt="...">';
+                     	}
+
+             			htmls+='<div style="width: 100%;">';
+             			htmls+='<div class="foot_f">';                 
+             			htmls+='<section class="fun_f">';
+             			htmls+='<div class="fun_s">';
+             			htmls+='<a href="#">';
+             			htmls+='<i class="far fa-heart" style="width: 29px; height:29px;"></i>';
+             			htmls+='</a>'
+             			htmls+='<a href="#">'
+             			htmls+='<i class="far fa-comment" style="width: 29px; height:29px;"></i>'
+             			htmls+='</a>';
+             			htmls+='<a href="#">';
+             			htmls+='<i class="far fa-share-square" style="width: 29px; height:29px;"></i>';
+             			htmls+='</a>';
+             			htmls+='</div>';
+             			htmls+='</section>';
+             			htmls+='<section class="fun_s">';
+             			htmls+='<span style="font-size:13px; font-weight: bold;">좋아요 '+ this.likecnt +' 개</span>';
+             			htmls+='</section>';
+             			htmls+='<section>';
+             			htmls+='<div class="fun_s">';
+             			htmls+='<span style="font-weight: bold;margin-right: 10px;">' + this.user.uid + '</span>';
+             			htmls+='<span>' + this.bcontent + '</span>';
+             			htmls+='</div>';
+             			htmls+='</section>';
+             			htmls+='<section>';
+             			htmls+='<div class="fun_s">';
+             			htmls+='<a href="#" class="comment_all">';
+             			htmls+='<span>댓글</span> <span style="font-weight: bold;">' + this.commentcnt + '</span><span>개 모두 보기</span>';
+             			htmls+='</a>';
+             			htmls+='</div>';
+             			htmls+='<div class="fun_s">';
+             			/* 커맨트관련 여기서부터 시작 */
+             			htmls+='<div>';
+             			htmls+='<span style="font-weight: bold;margin-right: 10px;">commentsuername</span>';
+             			htmls+='<span>comment contentasdssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss?</span>';
+             			htmls+='</div>';
+             			
+             			htmls+='<div>';
+             			htmls+='<span style="font-weight: bold;margin-right: 10px;">commentsuername</span>';
+             			htmls+='<span>comment content</span>';                                      
+             			htmls+='</div>';
+             			
+             			htmls+='</div>';
+             			
+             			htmls+='</section>';
+             			htmls+='<section>';
+             			htmls+='<div class="fun_s" style="font-size:9px;">';
+             			htmls+='<span style="color:#B0B0B0">' + this.timestring + '</span>';
+             			htmls+='</div>';
+             			htmls+='</section>';
+             			htmls+='</div>';
+             			htmls+='<section class="comment_write">';
+             			htmls+='<div>';
+             			htmls+='<div>';
+             			
+             			/* 댓글달기부분 */
+             			htmls+='<form class="comment_f">';
+             			htmls+='<textarea placeholder="댓글 달기"></textarea>';
+             			htmls+='<button class="comment_sub">게시</button>';
+             			htmls+='</form>';
+             			htmls+='</div>';
+             			htmls+='</div>';
+             			htmls+='</section>';
+             			htmls+='</div>';
+             			htmls+='</article>';
+								
+             			 })
+                        htmls+='</div>';  
+
+             			$("#loading").empty();
+         		        $(".m_2").css("display","block");
+         		        $("#add_html").html(htmls);
+	    			}
+
+	    	   });
 	    }
-	});
+	}); 
 </script>
 <body>
      

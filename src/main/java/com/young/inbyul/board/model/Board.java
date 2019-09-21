@@ -25,4 +25,5 @@ public class Board {
 	int commentcnt;
 	Date b_reg_dt;
 	CustomUser user;
+	String timestring;
 }

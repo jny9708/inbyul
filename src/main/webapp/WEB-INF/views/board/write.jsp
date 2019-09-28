@@ -51,31 +51,38 @@
                         </div>
                         
                          <c:if test="${mode eq 'modify'}">
+                         	<div>
                         	<c:forEach var="file" items="${board.fileArr}" varStatus="status"> 
+                        	
 	                        	<div id="fileno${file.fno}" style="display:inline-block;">
-			                        <div style="width:120px; height: 120px; margin:10px;" class="pre" >
+			                        <div style="width:120px; height:144px; margin:10px;">
+			                        	<div class="pre">
 			                                <div style="position:relative;">
 			                                    <img data-dz-thumbnail src="${root}${file.file_path}" style="width:120px; height: 120px;"/>
 			                                    
 			                                    <div data-dz-remove style="position:absolute; top:50%; left:50%; transform: translate( -50%, -50% ); "class="rmv" onclick="remove(${file.fno})" ><i class="far fa-trash-alt fa-2x"></i></div>
 			                                </div>
-			                                
+			                            </div>
 			                        </div>
 	                        	</div>
+	                        	
                         	</c:forEach>
+                        	</div>
                         </c:if>	
-                        
-                        
-                    </form>
-                
 
-                    <div id="preview" style="display:none;">
-                            <div style="width:120px; height: 120px; display:inline-block; margin:10px;" class="pre">
+                    </form>
+                    
+                        <div id="preview" style="display:none;">
+                            <div style="width:120px;  display:inline-block; margin:10px;">
+                                <div class="pre">
                                     <div style="position:relative;">
                                         <img data-dz-thumbnail />
                                         <div data-dz-remove style="position:absolute; top:50%; left:50%; transform: translate( -50%, -50% ); "class="rmv" ><i class="far fa-trash-alt fa-2x"></i></div>
                                     </div>
-                                    
+                                </div>
+                                <div style="cursor:auto;text-decoration:none; display:flex; justify-content: flex-end;" >
+                                    <a href="#" data-edmit-button class="editbutton" id="" style="text-decoration:none; color:black;">편집</a>
+                                </div>
                                 </div>
                     </div>
                 </div>
@@ -117,11 +124,14 @@
      <script src="https://unpkg.com/cropperjs"></script>
 </body>
 <script>
+_csrf_name = "${_csrf.headerName}";
+_csrf_token = "${_csrf.token}"
 var mode = '${mode}';    
 var root = '${root}';    
 
     var rmvFileArr = new Array(); //배열선언
-    var canvasMap = new Map();
+    var canvasMap = new Map(); // 저장될 파일을 사용자가 변형한 파일로 변경하기 위한 Map
+    var fileMap = new Map(); // dropzone 함수를 제외한 다른 함수에서 file을 써야했어서 편하게 접근하기 위해 map선언
     
     $('#mf_cc').click(function(){    
         location.href='<c:url value="/home"/>';
@@ -140,7 +150,6 @@ var root = '${root}';
             fileObj.file_path=src;
             rmvFileArr.push(fileObj);
         
-      
         console.log(rmvFileArr);
         $("#fileno"+fno).empty();
           
@@ -149,196 +158,7 @@ var root = '${root}';
     $("textarea.autosize").on('keydown keyup', function () {
       $(this).height(1).height( $(this).prop('scrollHeight')+12 );  
     });
-
-    Dropzone.options.dropzoneFrom = { 
-        autoProcessQueue: false,
-        acceptedFiles:".png,.jpg,.gif,.bmp,.jpeg",
-        uploadMultiple : true,
-        parallelUploads: 100,
-        paramName: "uploadFileArr",
-        init: function(){
-            var submitButton = document.querySelector('#submit-all');
-            myDropzone = this;
-            submitButton.addEventListener("click", function(){
-                var newcount= myDropzone.files.length;
-                if(mode=='write'){
-                    if(newcount>0){
-                        console.log("pro");
-                        myDropzone.processQueue();
-                    }else{
-                        Swal.fire({
-                            title: 'FAIL',
-                            html: '사진을 추가해주세요.',
-                            type: 'error',
-                            confirmButtonText: 'OK'
-                        })  
-                    }
-                }else{
-                    
-                    var orgcount = $('.pre').length - 1;
-                    console.log("m_m");
-                   
-                    if(newcount<1||rmvFileArr.length<1){
-                        var formData = new FormData();
-                        formData.append("bcontent", document.getElementById("autosize").value);
-                        for(var i =0; i<rmvFileArr.length; i++){
-                            formData.append("rmvFileArr["+ i +"].fno", rmvFileArr[i].fno);
-                            formData.append("rmvFileArr["+ i +"].file_path", rmvFileArr[i].file_path);
-                        }
-                      
-                        /* var paramData = JSON.stringify({"bcontent":document.getElementById("autosize").value,
-
-                                                        "filevo.rmvFileArr":rmvFileArr}); */
-
-                        var headers = {"Content-Type" : "application/json"
-                            ,"X-HTTP-Method-Override" : "POST"
-                          };
-                       
-                        $.ajax({
-                             url: root + "/restboard/update"
-                                 ,contentType: false
-                                 ,processData: false
-                                 ,type : 'POST'
-                                 ,data : formData
-                                 ,dataType : 'json'
-                                 ,beforeSend : function(xhr){
-                                     xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
-                                     $('.m_container').css('opacity','0.5');
-                                    $('#loading').css('display','block');
-                                        }
-                                 ,success : function(){
-                                     location.href='<c:url value="/home"/>'
-                                 }
-                        })
-                    }
-
-                    if(orgcount > 0||newcount > 0){
-
-                        console.log("m_pro");
-                        myDropzone.processQueue();
-                        
-                       }else{
-                           Swal.fire({
-                            title: 'FAIL',
-                            html: '사진을 추가해주세요.',
-                            type: 'error',
-                            confirmButtonText: 'OK'
-                        })
-                    }
-                }
-            });
-            this.on("addedfile", function(file){
-                console.log("asd");
-                var myDropZone = this;
-                 // Create the image editor overlay
-                var editor = document.createElement('div');
-                editor.style.position = 'fixed';
-                editor.style.left = 0;
-                editor.style.right = 0;
-                editor.style.top = 0;
-                editor.style.bottom = 0;
-                editor.style.zIndex = 9999;
-                editor.style.backgroundColor = '#000';
-                document.body.appendChild(editor);
-
-                // Create confirm button at the top left of the viewport
-                var buttonConfirm = document.createElement('button');
-                buttonConfirm.style.position = 'absolute';
-                buttonConfirm.style.left = '10px';
-                buttonConfirm.style.top = '10px';
-                buttonConfirm.style.zIndex = 9999;
-                buttonConfirm.textContent = 'Confirm';
-                editor.appendChild(buttonConfirm);
-                buttonConfirm.addEventListener('click', function() {
-
-                    // Get the canvas with image data from Cropper.js
-                    var canvas = cropper.getCroppedCanvas({
-                        width: 612,
-                        height: 612
-                    });
-                    // Turn the canvas into a Blob (file object without a name)
-                    canvas.toBlob(function(blob) {
-                        // 새로운 Dropzone 파일 썸네일 
-                        myDropZone.createThumbnail ( 
-                            blob, 
-                            myDropZone.options.thumbnailWidth,
-                            myDropZone.options.thumbnailHeight, 
-                            myDropZone.options.thumbnailMethod, 
-                            false, 
-                            function (dataURL) {
-                            
-                            // Dropzone 파일 썸네일 업데이트 
-                            myDropZone.emit ( 'thumbnail', file, dataURL); 
-                            // 파일을 Dropzone으로 반환 
-                            blob.name=file.name;
-                            canvasMap.set(file.name,blob);
-                        
-                        }); 
-                    });
-
-                    // Remove the editor from the view
-                    document.body.removeChild(editor);
-                });
-
-                 // Create an image node for Cropper.js
-                 var image = new Image();
-                    image.src = URL.createObjectURL(file);
-                    editor.appendChild(image);
-                    
-                    // Create Cropper.js
-                    var cropper = new Cropper(image, { aspectRatio: 1 });
-            });      
-
-			this.on("removedfile", function(file){
-				
-				
-            });
-
-            this.on("sendingmultiple", function(file, xhr, formData){
-
-                xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
-                formData.append("bcontent", document.getElementById("autosize").value);
-                formData.append("user.uno", document.getElementById("uno").value);
-                formData.append("mode", mode);
-               
-                if(mode=='modify'){
-
-                    for(var i =0; i<rmvFileArr.length; i++){
-                        formData.append("rmvFileArr["+ i +"].fno", rmvFileArr[i].fno);
-                        formData.append("rmvFileArr["+ i +"].file_path", rmvFileArr[i].file_path);
-                    }
-
-                    console.log(formData.get("rmvFileArr"))
-                    //formData.append("rmvFileArr", rmvArr);
-                }                    
-            });
-
-            this.on("processingmultiple", function(){
-                
-                $('.m_container').css('opacity','0.5');
-                $('#loading').css('display','block');
-              
-            }); 
-
-            this.on("completemultiple", function(){
-                //location.href='<c:url value="/home"/>'
-            });
-
-            
-            
-        },
-        transformFile: function(file, done) {
-
-            done(canvasMap.get(file.name));
-           
-        },
-         previewTemplate: document.querySelector('#preview').innerHTML
-    };
-    $(document).ready(function(){
-
-
-
-    });
     </script>
-
+    <script src="${root}/resources/js/myDropZone.js"></script>
+	<script src="${root}/resources/js/cropperpuls.js"></script>
 </html>

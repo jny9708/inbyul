@@ -45,14 +45,14 @@ public class RestBoardController {
 			if(board.getUploadFileArr() != null) {
 				logger.info("write");
 				
-				//boardService.insertBoard(board);
+				boardService.insertBoard(board);
 				
 			}		
 		}else {
 			logger.info("modify");
 			logger.info("filevo " + board.getBcontent());
 			logger.info("filevo " + board.getRmvFileArr().get(0).getFile_path());
-			logger.info("filevo " + board.getUploadFileArr().get(0));
+			logger.info("filevo " + board.getUploadFileArr().get(0).getOriginalFilename());
 			
 		}
 		

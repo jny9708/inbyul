@@ -20,6 +20,7 @@
 
 
 <script>
+	var root = '${pageContext.request.contextPath}';
 	$(document).ready(function(){
 	    var isRecomendUser = ${isRecomendUser};
 	    var htmls= '';
@@ -98,36 +99,43 @@
              			htmls+='<div class="hea_t">';
              			htmls+='<span>' + this.user.uid + '</span>';
              			htmls+='</div>';
+						
+             			htmls+='<div class="hea_t">';
+             			htmls+='<a href="#"  data-toggle="modal" data-target="#ModalMore" data-whatever="bno' + this.bno + '">';
+             			htmls+='<img src="https://img.icons8.com/material-outlined/24/000000/more.png" style="height: 24px;">';
+             			htmls+='</a>';
+             			htmls+='</div>';
+             			
              			htmls+='</div>';
              			htmls+='</div>';
              			htmls+='</header>';
 
-             			if(this.file_path.length>1){
+             			if(this.fileArr.length>1){
                  			<!-- 사진이 여러장일때 캐러셀 -->
-             				htmls+='<div id="carouselExampleControls" class="carousel slide carousel_f" data-ride="carousel" data-pause="hover" data-interval="false" data-wrap="false" >';							
+             				htmls+='<div id="article'+ this.bno +'" class="carousel slide carousel_f" data-ride="carousel" data-pause="hover" data-interval="false" data-wrap="false" >';							
              				htmls+='<div class="carousel-inner">';
              				
-							$.each(this.file_path,function(i){
+							$.each(this.fileArr,function(i){
 								
 								if(i==0){
 								
 									htmls+='<div class="carousel-item active">';
-									htmls+='<img class="content d-block w-100" src="${pageContext.request.contextPath}'+this+'"  alt="...">';
+									htmls+='<img class="content d-block w-100" src="${pageContext.request.contextPath}'+ this.file_path + '"  alt="...">';
 									htmls+='</div>';	
 								}else{
 								
 									htmls+='<div class="carousel-item">';
-									htmls+='<img src="${pageContext.request.contextPath}' + this + '" class="d-block w-100" alt="...">';
+									htmls+='<img src="${pageContext.request.contextPath}' + this.file_path + '" class="d-block w-100" alt="...">';
 									/* 갑자기 사진이 이상하게 뜨면 class에 content추가해보삼 */
 									htmls+='</div>';
 								}
 							})
 							htmls+='</div>';
-							htmls+='<a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">';
+							htmls+='<a class="carousel-control-prev" href="#article'+ this.bno +'" role="button" data-slide="prev">';
 							htmls+='<span class="carousel-control-prev-icon" aria-hidden="true"></span>';
 							htmls+='<span class="sr-only">Previous</span>';
 							htmls+='</a>';
-							htmls+='<a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">';
+							htmls+='<a class="carousel-control-next" href="#article'+ this.bno +'" role="button" data-slide="next">';
 							htmls+='<span class="carousel-control-next-icon" aria-hidden="true"></span>';
 							htmls+='<span class="sr-only">Next</span>';
 							htmls+='</a>';
@@ -214,6 +222,18 @@
 
 	    	   });
 	    }
+
+	    $('#ModalMore').on('show.bs.modal', function (event) {
+	        var button = $(event.relatedTarget) // Button that triggered the modal
+	        var recipient = button.data('whatever') // Extract info from data-* attributes
+	        var no=recipient.replace(/[^0-9]/g,'');
+
+	        $("#m_modify").attr("href", root + "/boardmodify?bno=" + no)
+	        $("#m_delete").attr("href", root + "/boarddelete?bno=" + no)
+	        
+	    })
+
+	    
 	}); 
 </script>
 <body>
@@ -259,6 +279,54 @@
     <div class="fixed-write">
             <a href="write.html" style="text-decoration: none; cursor:pointer;"><i class="fas fa-plus-circle fa-4x"></i></a>
     </div>
+    
+      <!-- Modal -->
+    <div class="modal fade" id="ModalMore" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                
+             <div class="modal-body" style="padding:0px;">
+                    <a href="#" id="m_modify" class="md_f">
+                        	수정하기
+                    </a>
+                    <a href="#" id="m_delete" class="md_f">
+                        	삭제하기
+                    </a>    
+                    <a href="#" class="md_f" id="m_shared" data-dismiss="modal" data-toggle="modal" data-target="#sharedlink">
+                        	공유하기
+                    </a>
+                    <a href="#" class="md_f" data-dismiss="modal">
+                        	취소
+                    </a>
+                </div>
+            </div>
+            </div>
+        </div> 
+        
+        <!-- Modal -->
+    <div class="modal fade" id="sharedlink" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                
+                <div class="modal-body" style="padding:0px;">
+                    <a href="#" class="md_f">
+                        트위터에 공유하기
+                    </a>
+                    <a href="#" class="md_f">
+                        링크 복사하기
+                    </a>    
+                    <a href="#" class="md_f">
+                        ...
+
+                    </a>
+                    <a href="#" class="md_f" data-dismiss="modal"> 
+                        취소
+                    </a>
+                </div>
+
+            </div>
+            </div>
+        </div> 
 	
 	<div id="loading">
 		<svg version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"

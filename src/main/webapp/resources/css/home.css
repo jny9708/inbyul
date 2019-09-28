@@ -330,3 +330,23 @@ form textarea:focus{
     left:50%;
     transform: translate(-50%,-50%);
   }
+  
+  .md_f{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom:1px solid #E6E6E6;
+    height: 52px;
+	}
+
+	@media (min-width: 576px){
+	    .modal-dialog {
+	        max-width: 384px;
+	        margin: 1.75rem auto;
+	    }
+	}
+	
+	.modal-body a{
+	    text-decoration: none;
+	    color:black;
+	}

@@ -33,15 +33,15 @@ public class MybatisTest {
 		for(Board board : boardList) {
 			logger.info("board uid : " + board.getUser().getUid());
 			logger.info("board uid : " + board.getUser().getUicon());
-			for(int i=0; i<board.getFile_path().size(); i++) {
-				logger.info("board file_path : " + board.getFile_path().get(i));
-			}
+//			for(int i=0; i<board.getFile_path().size(); i++) {
+//				logger.info("board file_path : " + board.getFile_path().get(i));
+//			}
 			
 		}
 		
 	}
 	
-	@Test
+	//@Test
 	public void test2() throws Exception{
 		List<CustomUser> userList = sqlSession.selectList("com.young.inbyul.test.getReUserList");
 		for(CustomUser user : userList) {
@@ -50,6 +50,21 @@ public class MybatisTest {
 		}
 		
 	}
+	
+	/*
+	 * @Test public void test3() throws Exception{ List<Board> boardList =
+	 * sqlSession.selectList("com.young.inbyul.test.getList"); for(Board board :
+	 * boardList) { logger.info("board uid : " + board.getUser().getUid());
+	 * 
+	 * 
+	 * for(int i = 0; i<board.getFilevo().size(); i++) {
+	 * System.out.println("board file_path " +
+	 * board.getFilevo().get(i).getFile_path());
+	 * 
+	 * }
+	 * 
+	 * } }
+	 */
 
 	
 }

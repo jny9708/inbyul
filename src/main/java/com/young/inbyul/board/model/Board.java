@@ -17,13 +17,15 @@ public class Board {
 
 	int bno;
 	String bcontent;
-	int uno;
-	Map<String,MultipartFile> file;
-//	List<File> saveFile_list;
-	List<String> file_path;
 	int likecnt;
 	int commentcnt;
 	Date b_reg_dt;
 	CustomUser user;
 	String timestring;
+	//Map<String,MultipartFile> files;
+	List<MultipartFile> uploadFileArr;
+	List<FileVO> rmvFileArr;
+	
+	List<FileVO> fileArr;
+
 }

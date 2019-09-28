@@ -7,7 +7,6 @@
 	<resultMap type="com.young.inbyul.board.model.Board" id="boardList">
 		<result property="bno" column="bno"/>
 		<result property="bcontent" column="bcontent"/>
-		<result property="uno" column="uno"/>
 		<result property="likecnt" column="likecnt"/>
 		<result property="commentcnt" column="commentcnt"/>
 		<result property="b_reg_dt" column="b_reg_dt"/>
@@ -16,10 +15,39 @@
              <result property="uid" column="uid"/>
              <result property="uicon" column="uicon"/>
         </association>
-        <collection property="file_path" javaType="java.util.ArrayList" column="bno" ofType="String" select="getfilepath">
-        	<result property="file_path" column="file_path"/>
-        </collection>
+        
+        <collection property="fileArr" javaType="java.util.ArrayList" column="bno" ofType="com.young.inbyul.board.model.FileVO" select="getfilepath">
+       			<result property="fno" column="fno"/>
+       			<result property="file_path" column="file_path"/>
+       </collection>
+       
+        <!-- <association property="filevo"  javaType="com.young.inbyul.board.model.File" >
+	        <collection property="file_path" javaType="java.util.ArrayList" column="bno" ofType="String" select="getfilepath">
+	        	<result property="file_path" column="file_path"/>
+	        </collection>
+        </association> -->
+        
+        
 	</resultMap>
+	
+	<resultMap type="com.young.inbyul.board.model.Board" id="boardContents">
+		<result property="bno" column="bno"/>
+		<result property="bcontent" column="bcontent"/>
+		
+		<collection property="fileArr" javaType="java.util.ArrayList" column="bno" ofType="com.young.inbyul.board.model.File" select="getfilepath">
+       			<result property="fno" column="fno"/>
+       			<result property="file_path" column="file_path"/>
+       </collection>
+		
+		<!-- <association property="filevo"  javaType="com.young.inbyul.board.model.File" >
+	        <collection property="file_path" javaType="java.util.ArrayList" column="bno" ofType="String" select="getfilepath">
+	        	<result property="file_path" column="file_path"/>
+	        </collection>
+        </association> -->
+	</resultMap>
+	
+	
+	
 
 
 
@@ -33,20 +61,19 @@
 			values
 			(
 			#{bcontent}
-			,#{uno}
+			,#{user.uno}
 			)
 		]]>
 	</insert>
 	
-	<insert id="insertImages" parameterType="com.young.inbyul.board.model.Board">
+	<insert id="insertImage" parameterType="com.young.inbyul.board.model.Board">
 		insert into postimages(bno,file_path)
-		values
-		<foreach collection="file_path" item="item" index="index" separator=",">
+		values 
 				(
 				#{bno}
-				,#{item}
+				,#{file_path}
 				)
-		 </foreach>
+		
 	</insert> 
 	
 	<select id="getFollowerList" resultType="int">
@@ -73,8 +100,12 @@
 			) order by b_reg_dt desc
 	</select>
 	
-	<select id="getfilepath" resultType="String">
-		 select file_path from postimages where bno = #{bno}
+	<select id="getfilepath" resultType="com.young.inbyul.board.model.FileVO">
+		 select pno as fno,file_path from postimages where bno = #{bno}
+	</select>
+	
+	<select id="getBoard" resultMap="boardContents">
+		select bno, bcontent from board where bno = #{bno}
 	</select>
 	
 </mapper>

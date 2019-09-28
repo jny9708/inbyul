@@ -94,3 +94,13 @@
     background-color:#3897f0;
     color:white;
 }
+.svg-sp{
+    width: 100px;
+    height: 100px;
+    margin: 20px;
+    display:inline-block;
+    position: absolute;
+    top:32%;
+    left:50%;
+    transform: translate(-50%,-50%);
+  }

@@ -7,17 +7,28 @@
 	<resultMap type="com.young.inbyul.board.model.Board" id="board">
 		<result property="bno" column="bno"/>
 		<result property="bcontent" column="bcontent"/>
-		<result property="uno" column="uno"/>
 		<result property="likecnt" column="likecnt"/>
 		<result property="commentcnt" column="commentcnt"/>
 		<result property="b_reg_dt" column="b_reg_dt"/>
 		 <association property="user"  javaType="com.young.inbyul.user.model.CustomUser" >
+		 	<result property="uno" column="uno"/>
              <result property="uid" column="uid"/>
              <result property="uicon" column="uicon"/>
-        </association>
-        <collection property="file_path" javaType="java.util.ArrayList" column="bno" ofType="String" select="getfilepath">
-        	<result property="file_path" column="file_path"/>
-        </collection>
+       </association>
+       
+       
+       <collection property="filevo" javaType="java.util.ArrayList" column="bno" ofType="com.young.inbyul.board.model.FileVO" select="getfilepath">
+       			<result property="fno" column="pno"/>
+       			<result property="file_path" column="file_path"/>
+       </collection>
+       
+       
+        <!-- <association property="filevo"  javaType="com.young.inbyul.board.model.File" >
+	        <collection property="file_path" javaType="java.util.ArrayList" column="bno" ofType="String" select="getfilepath">
+	        	<result property="file_path" column="file_path"/>
+	        </collection>
+        </association> -->
+        
 	</resultMap>
 	
 		
@@ -33,8 +44,8 @@
 			board.uno in (11,1);
 	</select>
 	
-	<select id="getfilepath" resultType="String">
-		 select file_path from postimages where bno = #{bno}
+	<select id="getfilepath" resultType="com.young.inbyul.board.model.FileVO">
+		 select file_path,pno from postimages where bno = #{bno}
 	</select>
 	
 	

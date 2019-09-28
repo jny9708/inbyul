@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.young.inbyul.board.model.Board;
+import com.young.inbyul.board.model.FileVO;
 import com.young.inbyul.user.model.CustomUser;
 
 @Repository
@@ -37,8 +38,8 @@ public class BoardRepository {
 		return sqlSession.insert(namespace_board + ".insertBoard",board);
 	}
 	
-	public int insertImages(Board board) throws Exception{
-		return sqlSession.insert(namespace_board + ".insertImages",board);
+	public int insertImage(Map<String,Object> map) throws Exception{
+		return sqlSession.insert(namespace_board + ".insertImage",map);
 	}
 	
 	public List<Integer> getFollowerList(int uno) throws Exception{
@@ -50,6 +51,23 @@ public class BoardRepository {
 		map.put("uno",uno);
 		map.put("followerList",followerList);
 		return sqlSession.selectList(namespace_board + ".getBoardList", map);
+	}
+	
+	public int deleteBoard(int bno) throws Exception{
+		return sqlSession.delete(namespace_board + ".deleteBoard",bno);
+	}
+	
+	public Board getBoard(int bno) throws Exception{
+		return sqlSession.selectOne(namespace_board + ".getBoard",bno);
+	}
+	
+	public int updateBoard(Board board) throws Exception{
+		return sqlSession.update(namespace_board+".updateBoard",board);
+	}
+	
+	public int deleteImages(List<FileVO> rmvFileArr) throws Exception{
+		// fno을 foreach로 해서 삭제하셔야합니다!
+		return sqlSession.delete(namespace_board+".deleteBoard",rmvFileArr);
 	}
 	
 }

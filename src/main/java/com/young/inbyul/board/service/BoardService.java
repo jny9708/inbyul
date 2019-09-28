@@ -1,42 +1,34 @@
 package com.young.inbyul.board.service;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.young.inbyul.board.model.Board;
+import com.young.inbyul.board.model.FileVO;
 import com.young.inbyul.board.repository.BoardRepository;
 import com.young.inbyul.user.model.CustomUser;
+import com.young.inbyul.util.FileProcess;
+import com.young.inbyul.util.TimeAgo;
 
 @Service
-public class BoardService {
+public class BoardService extends FileProcess{
 	
 	private static final Logger logger = LoggerFactory.getLogger(BoardService.class);
 	
-	public static final int SEC = 60;
-
-	public static final int MIN = 60;
-
-	public static final int HOUR = 24;
-
-	public static final int DAY = 30;
-
-	public static final int MONTH = 12;
-	
-	
 	@Autowired
 	private BoardRepository boardRepository; 
+	
+
 	
 	public int getFollowingCount(int uno) throws Exception {
 		return boardRepository.getFollowingCount(uno);
@@ -59,111 +51,79 @@ public class BoardService {
 	}
 	
 	@Transactional
-	public void insertBoard(Board board,String path) throws Exception{
-		//Map<String, MultipartFile> fileMap = request.getFileMap();
-		
-		List<MultipartFile> fileList = new ArrayList<>(board.getFile().values()); // 사용자가 보내온 멀티파일들 받기 
-		List<File> saveFile_list = new ArrayList<>();  //이름바꾸기위해서 새로만든 file 객체들 담음
-		
-		//리스트로 따로 만들어서 다른 함수에서 파일저장을 하는 이유는 모든 db값이 정상적으로 저장되었을때 마지막으로 저장되게끔하고싶었기 때문이다.
-		//db저장 파일저장 따로 하고싶었던 이유는
-		//예를 들어 3개의 파일이 넘어왔을때 2개는 db값과 파일이  정상적으로 저장되고  1개만 db값이 저장되다 오류를 일으켰을때 저장된 파일을 다시 모두 삭제해야하는데
-		//오류를 일으켰을 때 삭제하는것 보다 그냥 디비저장완료 되었을 때 파일저장하는게 더 나을 것 같다 생각했다.
-		
-		List<String> dbpath_list = new ArrayList<>();
-		
-		
-		boardRepository.insertBoard(board);
-		
-		for (MultipartFile multipartFile : fileList) {
-			String dbpath = "/resources/images/postimages/";
-			System.out.println(multipartFile.getOriginalFilename());
-			
-			File saveFile = makeFile(path,multipartFile);
-			
-			saveFile_list.add(saveFile);
-			dbpath += saveFile.getName();
-			dbpath_list.add(dbpath);
-		} 
-		board.setFile_path(dbpath_list);
-		boardRepository.insertImages(board);
-		uploadFile(fileList, saveFile_list);
+	public void insertBoard(Board board) throws Exception{
+		//boardRepository.insertBoard(board);
+		insertFile(board);
 	}
 	
-	public void uploadFile(List<MultipartFile> fileList,List<File> saveFile_list) throws Exception {
-		for(int i =0; i<fileList.size(); i++) {
-			FileCopyUtils.copy(fileList.get(i).getBytes(), saveFile_list.get(i));
+	public void insertFile(Board board) throws Exception{
+		
+		for(MultipartFile originFile : board.getUploadFileArr()) {
+			File remakeFile = remakeFile(originFile,getDestinationLocation());
+			saveFileToLocalDisk(originFile, remakeFile);
+
+			//saveFileToDatabase(remakeFile.getAbsolutePath(),board.getBno());
 		}
-		
 	}
 	
-	public File makeFile(String path, MultipartFile multipartFile) throws Exception{
-		UUID uuid = UUID.randomUUID();
-		String originalName = multipartFile.getOriginalFilename();
-		String type = originalName.substring(originalName.lastIndexOf("."));
-		String now = new SimpleDateFormat("yyyyMMddHmsS").format(new Date()); //현재시간
-		String saveName = uuid + "_" + now + type;
-		File saveFile = new File(path, saveName); // 저장할 폴더 이름, 저장할 파일 이름
-		return saveFile;
+	public void saveFileToDatabase(String path, int bno) throws Exception{
+		Map<String,Object> imageMap = new HashMap<>();
+		imageMap.put("filepath", path.substring(path.lastIndexOf("\\resources")));
+		imageMap.put("bno",bno);
+		boardRepository.insertImage(imageMap);
 	}
+	
+	private String getDestinationLocation() {
+        return "C:\\javaide\\spring-tool-suite-4-4.3.1.RELEASE-e4.12.0-win32.win32.x86_64\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\inbyul\\resources\\images\\postimages";
+	}
+	
 	
 	@Transactional
 	public List<Board> getBoardList(int uno) throws Exception{
 		List<Integer> followerList = boardRepository.getFollowerList(uno);
 		List<Board> boardList = boardRepository.getBoardList(uno, followerList);
+		TimeAgo timeAgo = new TimeAgo();
 		for(Board board : boardList) {
-			String timestring = timeString(board.getB_reg_dt());
+			String timestring = timeAgo.timeString(board.getB_reg_dt());
 			board.setTimestring(timestring);
 		}
 		return boardList;
 	}
 	
-	public String timeString(Date tempDate) {
-		
-		long curTime = System.currentTimeMillis();
-		long regTime = tempDate.getTime();
-		long diffTime = (curTime - regTime) / 1000;
-		String msg = null;
-
-		if (diffTime < SEC) {
-
-			// sec
-
-			msg = "방금 전";
-
-		} else if ((diffTime /= SEC) < MIN) {
-
-			// min
-
-			msg = diffTime + "분 전";
-
-		} else if ((diffTime /= MIN) < HOUR) {
-
-			// hour
-
-			msg = (diffTime) + "시간 전";
-
-		} else if ((diffTime /= HOUR) < DAY) {
-
-			// day
-
-			msg = (diffTime) + "일 전";
-
-		} else if ((diffTime /= DAY) < MONTH) {
-
-			// day
-
-			msg = (diffTime) + "달 전";
-
-		} else {
-
-			msg = (diffTime) + "년 전";
-
-		}
-
-
-
-		return msg;
-		
+	public int boardDelete(int bno) throws Exception{
+		return boardRepository.deleteBoard(bno);
 	}
+
+	public Board getBoard(int bno) throws Exception{
+		Board board = boardRepository.getBoard(bno);
+		return board;
+	}
+	
+	@Transactional
+	public void updateBoard(Board board) throws Exception {
+		
+		boardRepository.updateBoard(board);
+		updateFile(board);
+	}
+	
+	public void updateFile(Board board) throws Exception{
+		
+		if(!board.getUploadFileArr().isEmpty()) {
+			insertFile(board);
+		}
+		
+		if(board.getRmvFileArr().size() > 0) {
+			boardRepository.deleteImages(board.getRmvFileArr());
+			for(FileVO rmvFile : board.getFileArr() ) {
+				removeFileToLocalDisk(rmvFile.getFile_path(),getDestinationLocation());
+			}
+		}
+		
+		
+		
+
+	}
+	
+	
+	
 }

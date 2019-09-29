@@ -60,7 +60,7 @@ main{
     width: 600px;
     display : flex;
     flex-direction: row;
-    border:1px solid black;
+    
     
 }
 .m_1:nth-child(1){
@@ -98,7 +98,7 @@ main{
     width:100%;
     position : absolute;
     left:0;
-    border:1px solid black;
+    
     
 }
 

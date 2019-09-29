@@ -74,47 +74,60 @@
              		
              })  
 	    }else{
-		    
+	    	showBorList();
+	    }
+
+	    $('#ModalMore').on('show.bs.modal', function (event) {
+	        var button = $(event.relatedTarget) // Button that triggered the modal
+	        var recipient = button.data('whatever') // Extract info from data-* attributes
+	        var no=recipient.replace(/[^0-9]/g,'');
+
+	        $("#m_modify").attr("href", root + "/modifyboard/" + no)
+	        $("#m_delete").attr("href", root + "/deleteboard/"+ no)
+	        
+	    })
+	    
+		function showBorList(){
 	    	   $.ajax({
-             	url:"${getBorListURL}"
-             		,type : 'POST'
-             		,dataType : 'json'
-                 	,beforeSend : function(xhr){
-                 		xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+          	url:"${getBorListURL}"
+          		,type : 'POST'
+          		,dataType : 'json'
+              	,beforeSend : function(xhr){
+              		xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
 	                    	}
-             		,success : function(result){
-                 		
-             			htmls+='<div>';
+          		,success : function(result){
+              		
+          			htmls+='<div>';
 
-             			$.each(result,function(){
-             			htmls+='<article class="art_f">';
-             			htmls+='<header  style="border-bottom: 1px solid #e6e6e6;">';
-             			htmls+='<div class="hea_f">';	  
-             			htmls+='<div class="hea_s">';                              
-             			htmls+='<div class="hea_t">';
-             			htmls+='<a href="#">';
-             			htmls+='<img src="${pageContext.request.contextPath}/resources/images/' + this.user.uicon + '" width="32px" height="32px"></img>';
-             			htmls+='</a>';
-             			htmls+='</div>';
-             			htmls+='<div class="hea_t">';
-             			htmls+='<span>' + this.user.uid + '</span>';
-             			htmls+='</div>';
+          			$.each(result,function(){
+          			htmls+='<article class="art_f">';
+          			htmls+='<header  style="border-bottom: 1px solid #e6e6e6;">';
+          			htmls+='<div class="hea_f">';	  
+          			htmls+='<div class="hea_s">';                              
+          			htmls+='<div class="hea_t">';
+          			htmls+='<a href="#">';
+          			htmls+='<img src="${pageContext.request.contextPath}/resources/images/' + this.user.uicon + '" width="32px" height="32px"></img>';
+          			htmls+='</a>';
+          			htmls+='</div>';
+          			htmls+='<div class="hea_t">';
+          			htmls+='<span>' + this.user.uid + '</span>';
+          			htmls+='</div>';
 						
-             			htmls+='<div class="hea_t">';
-             			htmls+='<a href="#"  data-toggle="modal" data-target="#ModalMore" data-whatever="bno' + this.bno + '">';
-             			htmls+='<img src="https://img.icons8.com/material-outlined/24/000000/more.png" style="height: 24px;">';
-             			htmls+='</a>';
-             			htmls+='</div>';
-             			
-             			htmls+='</div>';
-             			htmls+='</div>';
-             			htmls+='</header>';
+          			htmls+='<div class="hea_t">';
+          			htmls+='<a href="#"  data-toggle="modal" data-target="#ModalMore" data-whatever="bno' + this.bno + '">';
+          			htmls+='<img src="https://img.icons8.com/material-outlined/24/000000/more.png" style="height: 24px;">';
+          			htmls+='</a>';
+          			htmls+='</div>';
+          			
+          			htmls+='</div>';
+          			htmls+='</div>';
+          			htmls+='</header>';
 
-             			if(this.fileArr.length>1){
-                 			<!-- 사진이 여러장일때 캐러셀 -->
-             				htmls+='<div id="article'+ this.bno +'" class="carousel slide carousel_f" data-ride="carousel" data-pause="hover" data-interval="false" data-wrap="false" >';							
-             				htmls+='<div class="carousel-inner">';
-             				
+          			if(this.fileArr.length>1){
+              			<!-- 사진이 여러장일때 캐러셀 -->
+          				htmls+='<div id="article'+ this.bno +'" class="carousel slide carousel_f" data-ride="carousel" data-pause="hover" data-interval="false" data-wrap="false" >';							
+          				htmls+='<div class="carousel-inner">';
+          				
 							$.each(this.fileArr,function(i){
 								
 								if(i==0){
@@ -141,98 +154,88 @@
 							htmls+='</a>';
 							htmls+='</div>';
 							<!-- 캐러셀 끝 -->
-                 		}else{
-                 			<!-- 사진이 한장일 때 -->
-                 			htmls+='<img class="content" src="../image/index_image.jpg" alt="...">';
-                     	}
+              		}else{
+              			<!-- 사진이 한장일 때 -->
+              			htmls+='<img class="content" src="'+ root + this.fileArr[0].file_path + '" alt="...">';
+              			console.log("??");
+                  	}
 
-             			htmls+='<div style="width: 100%;">';
-             			htmls+='<div class="foot_f">';                 
-             			htmls+='<section class="fun_f">';
-             			htmls+='<div class="fun_s">';
-             			htmls+='<a href="#">';
-             			htmls+='<i class="far fa-heart" style="width: 29px; height:29px;"></i>';
-             			htmls+='</a>'
-             			htmls+='<a href="#">'
-             			htmls+='<i class="far fa-comment" style="width: 29px; height:29px;"></i>'
-             			htmls+='</a>';
-             			htmls+='<a href="#">';
-             			htmls+='<i class="far fa-share-square" style="width: 29px; height:29px;"></i>';
-             			htmls+='</a>';
-             			htmls+='</div>';
-             			htmls+='</section>';
-             			htmls+='<section class="fun_s">';
-             			htmls+='<span style="font-size:13px; font-weight: bold;">좋아요 '+ this.likecnt +' 개</span>';
-             			htmls+='</section>';
-             			htmls+='<section>';
-             			htmls+='<div class="fun_s">';
-             			htmls+='<span style="font-weight: bold;margin-right: 10px;">' + this.user.uid + '</span>';
-             			htmls+='<span>' + this.bcontent + '</span>';
-             			htmls+='</div>';
-             			htmls+='</section>';
-             			htmls+='<section>';
-             			htmls+='<div class="fun_s">';
-             			htmls+='<a href="#" class="comment_all">';
-             			htmls+='<span>댓글</span> <span style="font-weight: bold;">' + this.commentcnt + '</span><span>개 모두 보기</span>';
-             			htmls+='</a>';
-             			htmls+='</div>';
-             			htmls+='<div class="fun_s">';
-             			/* 커맨트관련 여기서부터 시작 */
-             			htmls+='<div>';
-             			htmls+='<span style="font-weight: bold;margin-right: 10px;">commentsuername</span>';
-             			htmls+='<span>comment contentasdssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss?</span>';
-             			htmls+='</div>';
-             			
-             			htmls+='<div>';
-             			htmls+='<span style="font-weight: bold;margin-right: 10px;">commentsuername</span>';
-             			htmls+='<span>comment content</span>';                                      
-             			htmls+='</div>';
-             			
-             			htmls+='</div>';
-             			
-             			htmls+='</section>';
-             			htmls+='<section>';
-             			htmls+='<div class="fun_s" style="font-size:9px;">';
-             			htmls+='<span style="color:#B0B0B0">' + this.timestring + '</span>';
-             			htmls+='</div>';
-             			htmls+='</section>';
-             			htmls+='</div>';
-             			htmls+='<section class="comment_write">';
-             			htmls+='<div>';
-             			htmls+='<div>';
-             			
-             			/* 댓글달기부분 */
-             			htmls+='<form class="comment_f">';
-             			htmls+='<textarea placeholder="댓글 달기"></textarea>';
-             			htmls+='<button class="comment_sub">게시</button>';
-             			htmls+='</form>';
-             			htmls+='</div>';
-             			htmls+='</div>';
-             			htmls+='</section>';
-             			htmls+='</div>';
-             			htmls+='</article>';
+          			htmls+='<div style="width: 100%;">';
+          			htmls+='<div class="foot_f">';                 
+          			htmls+='<section class="fun_f">';
+          			htmls+='<div class="fun_s">';
+          			htmls+='<a href="#">';
+          			htmls+='<i class="far fa-heart" style="width: 29px; height:29px;"></i>';
+          			htmls+='</a>'
+          			htmls+='<a href="#">'
+          			htmls+='<i class="far fa-comment" style="width: 29px; height:29px;"></i>'
+          			htmls+='</a>';
+          			htmls+='<a href="#">';
+          			htmls+='<i class="far fa-share-square" style="width: 29px; height:29px;"></i>';
+          			htmls+='</a>';
+          			htmls+='</div>';
+          			htmls+='</section>';
+          			htmls+='<section class="fun_s">';
+          			htmls+='<span style="font-size:13px; font-weight: bold;">좋아요 '+ this.likecnt +' 개</span>';
+          			htmls+='</section>';
+          			htmls+='<section>';
+          			htmls+='<div class="fun_s">';
+          			htmls+='<span style="font-weight: bold;margin-right: 10px;">' + this.user.uid + '</span>';
+          			htmls+='<span>' + this.bcontent + '</span>';
+          			htmls+='</div>';
+          			htmls+='</section>';
+          			htmls+='<section>';
+          			htmls+='<div class="fun_s">';
+          			htmls+='<a href="#" class="comment_all">';
+          			htmls+='<span>댓글</span> <span style="font-weight: bold;">' + this.commentcnt + '</span><span>개 모두 보기</span>';
+          			htmls+='</a>';
+          			htmls+='</div>';
+          			htmls+='<div class="fun_s">';
+          			/* 커맨트관련 여기서부터 시작 */
+          			htmls+='<div>';
+          			htmls+='<span style="font-weight: bold;margin-right: 10px;">commentsuername</span>';
+          			htmls+='<span>comment contentasdssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss?</span>';
+          			htmls+='</div>';
+          			
+          			htmls+='<div>';
+          			htmls+='<span style="font-weight: bold;margin-right: 10px;">commentsuername</span>';
+          			htmls+='<span>comment content</span>';                                      
+          			htmls+='</div>';
+          			
+          			htmls+='</div>';
+          			
+          			htmls+='</section>';
+          			htmls+='<section>';
+          			htmls+='<div class="fun_s" style="font-size:9px;">';
+          			htmls+='<span style="color:#B0B0B0">' + this.timestring + '</span>';
+          			htmls+='</div>';
+          			htmls+='</section>';
+          			htmls+='</div>';
+          			htmls+='<section class="comment_write">';
+          			htmls+='<div>';
+          			htmls+='<div>';
+          			
+          			/* 댓글달기부분 */
+          			htmls+='<form class="comment_f">';
+          			htmls+='<textarea placeholder="댓글 달기"></textarea>';
+          			htmls+='<button class="comment_sub">게시</button>';
+          			htmls+='</form>';
+          			htmls+='</div>';
+          			htmls+='</div>';
+          			htmls+='</section>';
+          			htmls+='</div>';
+          			htmls+='</article>';
 								
-             			 })
-                        htmls+='</div>';  
+          			 })
+                     htmls+='</div>';  
 
-             			$("#loading").empty();
-         		        $(".m_2").css("display","block");
-         		        $("#add_html").html(htmls);
+          			$("#loading").empty();
+      		        $(".m_2").css("display","block");
+      		        $("#add_html").html(htmls);
 	    			}
 
 	    	   });
-	    }
-
-	    $('#ModalMore').on('show.bs.modal', function (event) {
-	        var button = $(event.relatedTarget) // Button that triggered the modal
-	        var recipient = button.data('whatever') // Extract info from data-* attributes
-	        var no=recipient.replace(/[^0-9]/g,'');
-
-	        $("#m_modify").attr("href", root + "/boardmodify?bno=" + no)
-	        $("#m_delete").attr("href", root + "/boarddelete?bno=" + no)
-	        
-	    })
-
+		}
 	    
 	}); 
 </script>

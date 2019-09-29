@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,36 +40,28 @@ public class RestBoardController {
 	}
 	
 	@RequestMapping(value="/upload", method=RequestMethod.POST)
-	public String upload(@ModelAttribute Board board,HttpServletRequest request) throws Exception{
+	public void upload(@ModelAttribute Board board,HttpServletRequest request) throws Exception{
 		String path = request.getSession().getServletContext().getRealPath("/resources/images/postimages");
 		if(request.getParameter("mode").equals("write")) {
 			if(board.getUploadFileArr() != null) {
 				logger.info("write");
 				
-				boardService.insertBoard(board);
-				
+				boardService.insertBoard(board);		
 			}		
 		}else {
 			logger.info("modify");
-			logger.info("filevo " + board.getBcontent());
-			logger.info("filevo " + board.getRmvFileArr().get(0).getFile_path());
-			logger.info("filevo " + board.getUploadFileArr().get(0).getOriginalFilename());
-			
-		}
 		
-		return "board/home";
+			boardService.updateBoard(board);
+		}	
+		
 	}
-	
 	
 	@RequestMapping(value="/update", method=RequestMethod.POST)
 	public int update(Board board) throws Exception{
 		
-		logger.info("filevo " + board.getBcontent());
-		logger.info("filevo " + board.getRmvFileArr().get(0).getFile_path());
-		
+		boardService.updateBoard(board);
 		return 1;
 	}
 	
-
 	
 }

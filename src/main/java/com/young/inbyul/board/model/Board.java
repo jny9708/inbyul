@@ -27,5 +27,6 @@ public class Board {
 	List<FileVO> rmvFileArr;
 	
 	List<FileVO> fileArr;
+	String folderpath;
 
 }

@@ -22,7 +22,7 @@
 	<c:set var="mode" value="modify" />
 </c:if>
 
-<c:url var="uploadURL" value="restboard/upload"/>
+<c:url var="uploadURL" value="/restboard/upload"/>
 <body>
     <section class="m_container">
         <main class="m_container_f">
@@ -126,6 +126,7 @@
 <script>
 _csrf_name = "${_csrf.headerName}";
 _csrf_token = "${_csrf.token}"
+var bno = '${board.bno}';
 var mode = '${mode}';    
 var root = '${root}';    
 

@@ -21,25 +21,28 @@
   
   $(document).ready(function(){
 
+	  var errormsg = '${errormsg}';
+		if(errormsg != ''){ 
+			console.log("asd?");
+				Swal.fire({
+	                title: 'FAIL',
+	                html: errormsg,
+	                type: 'error',
+	                confirmButtonText: 'OK'
+	                });
+		}
+
+		setTimeout(function() {
+		    $('.tracking-in-expand').css("display","none");
+		      $('.hero').css("display","block");
+		      $('.ro').css("display","block");
+		      
+		      
+		  }, 1500);
     
 
-    setTimeout(function() {
-    $('.tracking-in-expand').css("display","none");
-    // $('body').css({
-    //   'background': 'url(../image/index_image.jpg) no-repeat 50% 50% fixed',
-    //   '-webkit-background-size': 'cover',
-    //   '-moz-background-size': 'cover',
-    //   '-o-background-size': 'cover',
-    //   'background-size': 'cover',
-    //   'z-index': '-10'
-    //   });
-      $('.hero').css("display","block");
-      $('.ro').css("display","block");
-      // $('.hero-overlay').css("display","block");
-      
-  }, 1500);
 
-
+	
     var message = ${message};
     var origin = '${origin}';
 
@@ -115,6 +118,8 @@
               <button class="btn btn-primary btn-block">로그인</button>
             </div>
           </form>
+        
+	
         </div>
         
         <div class="gr_1">

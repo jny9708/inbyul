@@ -1,7 +1,5 @@
 package com.young.inbyul.config;
 
-import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -15,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
+import com.young.inbyul.security.handler.CustomAuthenticationFailureHandler;
 import com.young.inbyul.user.service.CustomUserDetailsService;
 
 
@@ -36,6 +35,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		auth.userDetailsService(customUserDetailsService)
 			.passwordEncoder(passwordEncoder());
 
+	}	
+	
+	@Bean
+	public CustomAuthenticationFailureHandler customAuthenticationFailureHandler() {
+		return new CustomAuthenticationFailureHandler();
 	}
 	
 	@Bean
@@ -65,6 +69,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.loginPage("/")
 				.loginProcessingUrl("/login")
 				.defaultSuccessUrl("/home")
+				.failureHandler(customAuthenticationFailureHandler())
 				.and()
 			.logout()
 				.logoutSuccessUrl("/");			

@@ -19,7 +19,7 @@ public class LoginController {
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(value = "/", method = {RequestMethod.GET,RequestMethod.POST})
 	public String home(@RequestParam(required = false , defaultValue ="0") int message, 
 						@RequestParam(required=false,defaultValue="") String origin ,Model model) {
 		logger.info("Welcome home");

@@ -108,4 +108,19 @@
 		select bno, bcontent from board where bno = #{bno}
 	</select>
 	
+	<delete id="deleteBoard">
+		delete from board where bno = #{bno}
+	</delete>
+	
+	<update id="updateBoard">
+		update board set bcontent = #{bcontent} where bno = #{bno}
+	</update>
+	
+	<delete id="deleteImages">
+		delete from postimages where pno in
+		<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+			#{item.fno}
+		</foreach>
+	</delete>
+	
 </mapper>

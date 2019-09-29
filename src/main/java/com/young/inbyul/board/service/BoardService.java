@@ -52,7 +52,7 @@ public class BoardService extends FileProcess{
 	
 	@Transactional
 	public void insertBoard(Board board) throws Exception{
-		//boardRepository.insertBoard(board);
+		boardRepository.insertBoard(board);
 		insertFile(board);
 	}
 	
@@ -62,22 +62,23 @@ public class BoardService extends FileProcess{
 			File remakeFile = remakeFile(originFile,getDestinationLocation());
 			saveFileToLocalDisk(originFile, remakeFile);
 
-			//saveFileToDatabase(remakeFile.getAbsolutePath(),board.getBno());
+			saveFileToDatabase(remakeFile.getName(),board.getBno());
 		}
 	}
 	
-	public void saveFileToDatabase(String path, int bno) throws Exception{
+	public void saveFileToDatabase(String filename, int bno) throws Exception{
+		String path = getDestinationLocation() + "/" + filename;
 		Map<String,Object> imageMap = new HashMap<>();
-		imageMap.put("filepath", path.substring(path.lastIndexOf("\\resources")));
+		imageMap.put("file_path", path.substring(path.lastIndexOf("/resources")));
 		imageMap.put("bno",bno);
 		boardRepository.insertImage(imageMap);
 	}
 	
 	private String getDestinationLocation() {
-        return "C:\\javaide\\spring-tool-suite-4-4.3.1.RELEASE-e4.12.0-win32.win32.x86_64\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\inbyul\\resources\\images\\postimages";
+        return "C:/javaide/spring-tool-suite-4-4.3.1.RELEASE-e4.12.0-win32.win32.x86_64/workspace/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/inbyul/resources/images/postimages";
 	}
 	
-	
+	  
 	@Transactional
 	public List<Board> getBoardList(int uno) throws Exception{
 		List<Integer> followerList = boardRepository.getFollowerList(uno);
@@ -90,8 +91,13 @@ public class BoardService extends FileProcess{
 		return boardList;
 	}
 	
-	public int boardDelete(int bno) throws Exception{
-		return boardRepository.deleteBoard(bno);
+	@Transactional
+	public void deleteBoard(int bno) throws Exception{
+		List<FileVO> rmvFileList = boardRepository.getFilePaths(bno);
+		for(FileVO rmvFile : rmvFileList ) {
+			removeFileToLocalDisk(rmvFile.getFile_path(),getDestinationLocation());
+		}
+		boardRepository.deleteBoard(bno);
 	}
 
 	public Board getBoard(int bno) throws Exception{
@@ -101,26 +107,23 @@ public class BoardService extends FileProcess{
 	
 	@Transactional
 	public void updateBoard(Board board) throws Exception {
-		
 		boardRepository.updateBoard(board);
 		updateFile(board);
 	}
 	
 	public void updateFile(Board board) throws Exception{
 		
-		if(!board.getUploadFileArr().isEmpty()) {
+		if(board.getUploadFileArr()!=null) {
 			insertFile(board);
 		}
 		
-		if(board.getRmvFileArr().size() > 0) {
+		if(board.getRmvFileArr()!=null) {
 			boardRepository.deleteImages(board.getRmvFileArr());
-			for(FileVO rmvFile : board.getFileArr() ) {
+			for(FileVO rmvFile : board.getRmvFileArr() ) {
 				removeFileToLocalDisk(rmvFile.getFile_path(),getDestinationLocation());
 			}
 		}
-		
-		
-		
+
 
 	}
 	

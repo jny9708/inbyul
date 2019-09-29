@@ -3,6 +3,7 @@ package com.young.inbyul.board.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,17 +22,19 @@ public class BoardController {
 		return "board/write";
 	}
 	
-	@RequestMapping("/boarddelete")
-	public String boardDelete(@RequestParam int bno) throws Exception{
-		boardService.boardDelete(bno);
-		return "board/home";
+	@RequestMapping("/deleteboard/{bno}")
+	public String boardDelete(@PathVariable int bno) throws Exception{
+		boardService.deleteBoard(bno);
+		return "redirect:/home";
 	}
 	
-	@RequestMapping(value="/boardmodify",method=RequestMethod.GET)
-	public String boardModify(@RequestParam int bno, Model model) throws Exception{
+	@RequestMapping(value="/modifyboard/{bno}",method=RequestMethod.GET)
+	public String boardModify(@PathVariable int bno, Model model) throws Exception{
 		Board board = boardService.getBoard(bno);
 		model.addAttribute("board", board);
 		return "board/write";
 	}
+	
+	
 	
 }

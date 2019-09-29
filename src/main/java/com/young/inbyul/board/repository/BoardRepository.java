@@ -67,7 +67,11 @@ public class BoardRepository {
 	
 	public int deleteImages(List<FileVO> rmvFileArr) throws Exception{
 		// fno을 foreach로 해서 삭제하셔야합니다!
-		return sqlSession.delete(namespace_board+".deleteBoard",rmvFileArr);
+		return sqlSession.delete(namespace_board+".deleteImages",rmvFileArr);
+	}
+	
+	public List<FileVO> getFilePaths(int bno) throws Exception{
+		return sqlSession.selectList(namespace_board+".getfilepath",bno);
 	}
 	
 }

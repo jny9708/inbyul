@@ -109,5 +109,5 @@ function addEditHtmls(myDropZone,file,e){
              
              editor.appendChild(image);
              
-             cropper = new Cropper(image, { aspectRatio: 16/9,viewMode:2 });
+             var cropper = new Cropper(image, { aspectRatio: 1,viewMode:2 });
 }

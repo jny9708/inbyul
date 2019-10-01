@@ -13,6 +13,7 @@ function insertcmt(paramData,type){
                 		xhr.setRequestHeader(_csrf_name, _csrf_token);
  	            }
  			  , success: function(result){
+ 				 page=1;
  				 var cmtcnt = $('#cmtcnt' + paramData.bno).text()*1
  				 $('#cmtcnt' + paramData.bno).text(cmtcnt+1);
  				 
@@ -42,48 +43,72 @@ function insertcmt(paramData,type){
 }
 
 function showcmtlist(bno){
-	 
 	var headers = {"Content-Type" : "application/json"
-			,"X-HTTP-Method-Override" : "GET"
+			,"X-HTTP-Method-Override" : "POST"
 		  };
+	var paramData={"page":page};
 	 
 	$.ajax({
 		  url: root+"/restcmt/"+bno
 			  , headers: headers
-			  , type : 'GET'
+			  , type : 'POST'
+		      , data : JSON.stringify(paramData)
 			  , beforeSend : function(xhr){
               		xhr.setRequestHeader(_csrf_name, _csrf_token);
 	            }
 			  , success: function(result){
-				  var htmls = '';
-				  $.each(result,function(){
-				  htmls+='<div class="mymb-f">';
-				  htmls+='<div class="mymb-s">';
-				  htmls+='<a href="#">';
-				  htmls+='<img src="' + root + '/resources/images/' + this.user.uicon+ '" width="32px" height="32px"></img>';  
-				  htmls+='</a>';
-				  htmls+='</div>';
-				  htmls+='<div class="mymb-s">';
-				  htmls+='<div class="mymb-t">';
-				  htmls+='<div style="font-weight: bold;" id="personaluid">' + this.user.uid + '</div>';
-				  if(this.user.uno == uno){
-					  htmls+='<a href="#" onclick="deletecmt(' + this.cno + ','+  this.bno +')">';
-					  htmls+='<i class="far fa-trash-alt"></i>';
-					  htmls+='</a>';  
+				  if(page==1){
+					  $(".plusbtn a").css("display","block");
+					  $("#m_addcmt").html("");
+					  htmls = makehtml(result);
+					  $("#m_addcmt").html(htmls);
+					  page+=1;
+				  }else{
+					  if(result.length>0){
+						  $("#L9").css("display","none");
+						  $(".plusbtn a").css("display","block");
+						  htmls = makehtml(result);
+						  $("#m_addcmt").append(htmls)
+						  page+=1;
+					  }
+					  else{
+						  $("#L9").css("display","none");
+						  $(".plusbtn a").css("display","none");
+					  }
 				  }
 				  
-				  htmls+='</div>';
-				  htmls+='<div>' + this.ccontent + '</div>';
-				  htmls+='</div>';
-				  htmls+='</div>';
-				  });
-				  $("#m_addcmt").html(htmls);
 			  }
 			  , error: function(request,status,error){
 					console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 			  }
 		  });
 	
+}
+
+function makehtml(result){
+	var htmls = '';
+	  $.each(result,function(){
+	  htmls+='<div class="mymb-f">';
+	  htmls+='<div class="mymb-s">';
+	  htmls+='<a href="#">';
+	  htmls+='<img src="' + root + '/resources/images/' + this.user.uicon+ '" width="32px" height="32px"></img>';  
+	  htmls+='</a>';
+	  htmls+='</div>';
+	  htmls+='<div class="mymb-s">';
+	  htmls+='<div class="mymb-t">';
+	  htmls+='<div style="font-weight: bold;" id="personaluid">' + this.user.uid + '</div>';
+	  if(this.user.uno == uno){
+		  htmls+='<a href="#" onclick="deletecmt(' + this.cno + ','+  this.bno +')">';
+		  htmls+='<i class="far fa-trash-alt"></i>';
+		  htmls+='</a>';  
+	  }
+	  
+	  htmls+='</div>';
+	  htmls+='<div>' + this.ccontent + '</div>';
+	  htmls+='</div>';
+	  htmls+='</div>';
+	  });
+	  return htmls;
 }
 
 function deletecmt(cno,bno){
@@ -102,6 +127,7 @@ function deletecmt(cno,bno){
             		xhr.setRequestHeader(_csrf_name, _csrf_token);
 	            }
 			  , success: function(result){
+				  page=1;
 				  showcmtlist(bno);
 				  var cmtcnt = $('#cmtcnt' + bno).text()*1
 	 				 $('#cmtcnt' + bno).text(cmtcnt-1);

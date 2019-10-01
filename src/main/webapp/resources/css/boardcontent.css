@@ -65,5 +65,13 @@ main {
     padding-top:3px;
 }
 
+.plusbtn{
+    display: flex;
+    justify-content: center;
+}
+
+.plusbtn a{
+    text-decoration: none;
+}
 
 

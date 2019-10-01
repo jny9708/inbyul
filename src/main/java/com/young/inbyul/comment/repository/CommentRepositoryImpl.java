@@ -1,6 +1,8 @@
 package com.young.inbyul.comment.repository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,9 +48,11 @@ public class CommentRepositoryImpl implements CommentRepository {
 	}
 
 	@Override
-	public List<CommentVO> getcmtlist(Criteria criteria) throws Exception {
-		
-		return sqlSession.selectList(namespace + ".getcmtlist", criteria);
+	public List<CommentVO> getcmtlist(int bno,Criteria criteria) throws Exception {
+		Map<String,Object> map = new HashMap<>();
+		map.put("bno", bno);
+		map.put("criteria", criteria);
+		return sqlSession.selectList(namespace + ".getcmtlist", map);
 	}
 	
 	

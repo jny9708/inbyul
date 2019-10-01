@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.young.inbyul.comment.model.CommentVO;
 import com.young.inbyul.comment.service.CommentService;
 import com.young.inbyul.user.model.SecurityCustomUser;
+import com.young.inbyul.util.Criteria;
 
 @RestController
 @RequestMapping("/restcmt")
@@ -49,9 +49,10 @@ public class RestCommentController {
 		
 	}
 	
-	@RequestMapping(value="/{bno}",method=RequestMethod.GET)
-	public List<CommentVO> getcmtlist(@PathVariable int bno) throws Exception{
-		return commentService.getcmtlist(bno);
+	@RequestMapping(value="/{bno}",method= {RequestMethod.GET,RequestMethod.POST})
+	public List<CommentVO> getcmtlist(@PathVariable int bno,@RequestBody Criteria criteria) throws Exception{
+		
+		return commentService.getcmtlist(bno,criteria);
 	}
 	
 }

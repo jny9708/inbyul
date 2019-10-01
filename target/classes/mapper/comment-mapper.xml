@@ -35,7 +35,7 @@
 		from comment join user on comment.uno = user.uno 
 		where comment.bno=#{bno}
 		order by c_reg_dt desc
-		limit #{pageStart},#{perPageNum}
+		limit #{criteria.pageStart},#{criteria.perPageNum}
 	</select>
 	
 	<update id="addcmtcnt">

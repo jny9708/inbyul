@@ -55,8 +55,27 @@
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
-                <div class="modal-body" id="m_addcmt">
-
+                <div class="modal-body" >
+					<div id="m_addcmt">
+					</div>
+					<div class="plusbtn">
+                                <a href="#" style="display:none;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6 13h-5v5h-2v-5h-5v-2h5v-5h2v5h5v2z"/></svg>
+                                </a>
+                   <svg style="display : none;" width="40" height="40" version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+  			viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve"  >
+		    <path fill="green" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
+		      <animateTransform 
+		         attributeName="transform" 
+		         attributeType="XML" 
+		         type="rotate"
+		         dur="1s" 
+		         from="0 50 50"
+		         to="360 50 50" 
+		         repeatCount="indefinite" />
+		  </path>
+		</svg>
+                            </div>
                     <!-- <div class="mymb-f">
                         <div class="mymb-s">
                             <a href="#">

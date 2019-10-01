@@ -12,5 +12,5 @@ public interface CommentRepository {
 	public List<CommentVO> getcmtlist(int bno) throws Exception;
 	public void addcmtcnt(int bno) throws Exception;
 	public void subcmtcnt(int bno) throws Exception;
-	public List<CommentVO> getcmtlist(Criteria criteria) throws Exception;
+	public List<CommentVO> getcmtlist(int bno,Criteria criteria) throws Exception;
 }

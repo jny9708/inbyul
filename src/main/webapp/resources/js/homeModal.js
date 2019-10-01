@@ -5,7 +5,7 @@
 
 	        $("#m_redirect").attr("href", "#");
 	        
-	    })
+	    });
 	    
 	      $('#ModalMore').on('show.bs.modal', function (event) {
 	        var button = $(event.relatedTarget) // Button that triggered the modal
@@ -15,7 +15,7 @@
 	        $("#m_modify").attr("href", root + "/modifyboard/" + no)
 	        $("#m_delete").attr("href", root + "/deleteboard/"+ no)
 	        
-	    })
+	    });
 	    
 	      $('#commentmodal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget) // Button that triggered the modal
@@ -25,4 +25,17 @@
             $("#addcmtlayout"+no).empty();
             showcmtlist(no);
             
-        })   
+        }); 
+	      
+	      $(document).on("click",".plusbtn a",function(e){
+	            $(".plusbtn a").css("display","none");
+	            $("#L9").css("display","block");
+	            showcmtlist(bno);
+	        });
+	      
+	      $(document).on("click",".close",function(e){
+	            page=1;
+	            $(".plusbtn a").css("display","block");
+	        });
+	      
+	      

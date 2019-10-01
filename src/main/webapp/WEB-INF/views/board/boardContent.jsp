@@ -162,6 +162,8 @@
     	var username = '<sec:authentication property="principal.username"/>';
     	var _csrf_name = "${_csrf.headerName}";
     	var _csrf_token = "${_csrf.token}";
+    	var page = 1; 
+    	var bno = "${board.bno}";
     </script>
     <script src="${root}/resources/js/homeModal.js"></script>
 	<script src="${root}/resources/js/HomeAjax.js"></script>

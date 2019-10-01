@@ -3,6 +3,7 @@ package com.young.inbyul.config;
 import javax.servlet.Filter;
 
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 
@@ -31,9 +32,10 @@ public class SpringWebMvcInitializer extends AbstractAnnotationConfigDispatcherS
 	@Override
     protected Filter[] getServletFilters() {
         CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter();
+        HiddenHttpMethodFilter hiddenHttpMethodFilter = new HiddenHttpMethodFilter();
         encodingFilter.setEncoding("UTF-8");
         encodingFilter.setForceEncoding(true);
-        return new Filter[]{encodingFilter};
+        return new Filter[]{encodingFilter,hiddenHttpMethodFilter};
     }
 
 

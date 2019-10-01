@@ -6,7 +6,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.young.inbyul.board.model.Board;
 import com.young.inbyul.board.service.BoardService;
@@ -35,6 +34,12 @@ public class BoardController {
 		return "board/write";
 	}
 	
+	@RequestMapping(value="/boardContent/{bno}",method=RequestMethod.GET)
+	public String boardContent(@PathVariable int bno,Model model) throws Exception{
+		Board board = boardService.getBoard(bno);
+		model.addAttribute(board);
+		return "board/boardContent";
+	}
 	
 	
 }

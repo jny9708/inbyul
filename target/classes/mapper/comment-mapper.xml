@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.young.inbyul.comment">
+	
+	<resultMap type="com.young.inbyul.comment.model.CommentVO" id="cmtList">
+		<result property="cno" column="cno"/>
+		<result property="bno" column="bno"/>
+		<result property="ccontent" column="ccontent"/>
+		<result property="c_reg_dt" column="c_reg_dt"/>
+		 <association property="user"  javaType="com.young.inbyul.user.model.CustomUser" >
+		 	<result property="uno" column="uno"/>
+             <result property="uid" column="uid"/>
+             <result property="uicon" column="uicon"/>
+        </association>
+	</resultMap>
+	
+	
+	<insert id="insertcmt" parameterType="com.young.inbyul.comment.model.CommentVO" >
+		insert into comment (bno,uno,ccontent) 
+		values( 
+		#{bno}
+		,#{user.uno}
+		,#{ccontent}
+		);
+	</insert>
+	
+	<delete id="deletecmt">
+		delete from comment where cno = #{cno};
+	</delete>
+	
+	<select id="getcmtlist" resultMap="cmtList">
+		select comment.*,user.uid,user.uicon,user.uno 
+		from comment join user on comment.uno = user.uno 
+		where comment.bno=#{bno}
+		order by c_reg_dt desc
+		limit #{pageStart},#{perPageNum}
+	</select>
+	
+	<update id="addcmtcnt">
+		update board set commentcnt = commentcnt+1 where bno = #{bno};
+	</update>
+	
+	<update id="subcmtcnt">
+		update board set commentcnt = commentcnt-1 where bno = #{bno};
+	</update>
+	
+</mapper>

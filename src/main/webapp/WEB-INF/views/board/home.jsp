@@ -4,23 +4,32 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html lang="ko">
+<c:set var="root" value="${pageContext.request.contextPath}" />
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <jsp:include page="../layout/header.jsp"></jsp:include>
-    <link href="${pageContext.request.contextPath}/resources/css/home.css" rel="stylesheet">
+    <link href="${root}/resources/css/home.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
     <title>INBYUL</title>
-    
 </head>
+
 <c:url var="getReListURL" value="/restboard/getReList"></c:url>
 
 <c:url var="writeFormURL" value="/writeform"></c:url>
 <c:url var="getBorListURL" value="/restboard/getBorList"></c:url>
+<style>
 
+</style>
 
 <script>
 	var root = '${pageContext.request.contextPath}';
+	var windowWidth=window.innerWidth;;
+	var uno = '<sec:authentication property="principal.uno"/>';
+	var username = '<sec:authentication property="principal.username"/>';
+	var _csrf_name = "${_csrf.headerName}";
+	var _csrf_token = "${_csrf.token}";
 	$(document).ready(function(){
 	    var isRecomendUser = ${isRecomendUser};
 	    var htmls= '';
@@ -68,7 +77,7 @@
              		        htmls+='</div>';
              		            
              		        $("#loading").empty();
-             		        $(".m_2").css("display","block");
+             		       	removem_2();
              		        $("#add_html").html(htmls);
              			}
              		
@@ -76,16 +85,6 @@
 	    }else{
 	    	showBorList();
 	    }
-
-	    $('#ModalMore').on('show.bs.modal', function (event) {
-	        var button = $(event.relatedTarget) // Button that triggered the modal
-	        var recipient = button.data('whatever') // Extract info from data-* attributes
-	        var no=recipient.replace(/[^0-9]/g,'');
-
-	        $("#m_modify").attr("href", root + "/modifyboard/" + no)
-	        $("#m_delete").attr("href", root + "/deleteboard/"+ no)
-	        
-	    })
 	    
 		function showBorList(){
 	    	   $.ajax({
@@ -114,7 +113,15 @@
           			htmls+='</div>';
 						
           			htmls+='<div class="hea_t">';
-          			htmls+='<a href="#"  data-toggle="modal" data-target="#ModalMore" data-whatever="bno' + this.bno + '">';
+          			//여기서부터 변경
+          			htmls+='<a href="#"  data-toggle="modal" data-target="';
+					if(this.user.uno==uno){
+						htmls+='#ModalMore"'
+					}else{
+						htmls+='#otherModalMore"'
+					}
+					htmls+='data-whatever="bno' + this.bno + '">';	
+					// 여기까지 변경
           			htmls+='<img src="https://img.icons8.com/material-outlined/24/000000/more.png" style="height: 24px;">';
           			htmls+='</a>';
           			htmls+='</div>';
@@ -186,21 +193,12 @@
           			htmls+='</section>';
           			htmls+='<section>';
           			htmls+='<div class="fun_s">';
-          			htmls+='<a href="#" class="comment_all">';
-          			htmls+='<span>댓글</span> <span style="font-weight: bold;">' + this.commentcnt + '</span><span>개 모두 보기</span>';
+          			htmls+='<a href="' + root + '/boardContent/' + this.bno + '" class="comment_all">';
+          			htmls+='<span>댓글</span> <span style="font-weight: bold;" id="cmtcnt' + this.bno + '">' + this.commentcnt + '</span><span>개 모두 보기</span>';
           			htmls+='</a>';
           			htmls+='</div>';
-          			htmls+='<div class="fun_s">';
-          			/* 커맨트관련 여기서부터 시작 */
-          			htmls+='<div>';
-          			htmls+='<span style="font-weight: bold;margin-right: 10px;">commentsuername</span>';
-          			htmls+='<span>comment contentasdssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss?</span>';
-          			htmls+='</div>';
+          			htmls+='<div class="fun_s" id="addcmtlayout' + this.bno + '">';		/* 커맨트관련 여기서부터 시작 */
           			
-          			htmls+='<div>';
-          			htmls+='<span style="font-weight: bold;margin-right: 10px;">commentsuername</span>';
-          			htmls+='<span>comment content</span>';                                      
-          			htmls+='</div>';
           			
           			htmls+='</div>';
           			
@@ -217,8 +215,8 @@
           			
           			/* 댓글달기부분 */
           			htmls+='<form class="comment_f">';
-          			htmls+='<textarea placeholder="댓글 달기"></textarea>';
-          			htmls+='<button class="comment_sub">게시</button>';
+          			htmls+='<textarea placeholder="댓글 달기" id="cmt_bno' + this.bno + '"></textarea>';
+          			htmls+='<button type="button" class="comment_sub c_sbm_btn" id="sbm' + this.bno + '" >게시</button>';
           			htmls+='</form>';
           			htmls+='</div>';
           			htmls+='</div>';
@@ -230,14 +228,30 @@
                      htmls+='</div>';  
 
           			$("#loading").empty();
-      		        $(".m_2").css("display","block");
+      		      	removem_2();
       		        $("#add_html").html(htmls);
 	    			}
 
 	    	   });
-		}
+		}  
 	    
-	}); 
+	    $( window ).resize(function() {
+	    	   //창크기 변화 감지
+	    	 windowWidth = window.innerWidth;   
+				if(windowWidth < 1000) {
+					$(".m_2").attr('style','');
+				}
+	    	});
+	  
+	});
+	 function removem_2(){
+	    	if(windowWidth < 1000) {
+		    	var el = document.getElementById('m_2');
+		    	el.removeAttribute('style');
+			}else{
+				$(".m_2").css("display","block");
+				}
+		    } 
 </script>
 <body>
      
@@ -249,7 +263,7 @@
             </section>
                 
             <aside class="m_1">
-                <div class="m_2" style="display:none;">   
+                <div class="m_2" style="display:none;" id="m_2">   
                     <div class="info_f">
                         <div class="info_s">
                             <img src="${pageContext.request.contextPath}/resources/images/<sec:authentication property="principal.uicon"/>" style="width: 50px; height:50px;" >
@@ -283,53 +297,8 @@
             <a href="write.html" style="text-decoration: none; cursor:pointer;"><i class="fas fa-plus-circle fa-4x"></i></a>
     </div>
     
-      <!-- Modal -->
-    <div class="modal fade" id="ModalMore" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                
-             <div class="modal-body" style="padding:0px;">
-                    <a href="#" id="m_modify" class="md_f">
-                        	수정하기
-                    </a>
-                    <a href="#" id="m_delete" class="md_f">
-                        	삭제하기
-                    </a>    
-                    <a href="#" class="md_f" id="m_shared" data-dismiss="modal" data-toggle="modal" data-target="#sharedlink">
-                        	공유하기
-                    </a>
-                    <a href="#" class="md_f" data-dismiss="modal">
-                        	취소
-                    </a>
-                </div>
-            </div>
-            </div>
-        </div> 
-        
-        <!-- Modal -->
-    <div class="modal fade" id="sharedlink" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                
-                <div class="modal-body" style="padding:0px;">
-                    <a href="#" class="md_f">
-                        트위터에 공유하기
-                    </a>
-                    <a href="#" class="md_f">
-                        링크 복사하기
-                    </a>    
-                    <a href="#" class="md_f">
-                        ...
-
-                    </a>
-                    <a href="#" class="md_f" data-dismiss="modal"> 
-                        취소
-                    </a>
-                </div>
-
-            </div>
-            </div>
-        </div> 
+    <jsp:include page="../layout/modalLayout.jsp"></jsp:include>
+  
 	
 	<div id="loading">
 		<svg version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -348,7 +317,8 @@
 	</div>
 	
 	
-	
-
+	<script src="${root}/resources/js/homeModal.js"></script>
+	<script src="${root}/resources/js/HomeAjax.js"></script>
+	<script src="${root}/resources/js/cmtAjax.js"></script>
 </body>
 </html>

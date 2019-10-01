@@ -33,6 +33,14 @@
 	<resultMap type="com.young.inbyul.board.model.Board" id="boardContents">
 		<result property="bno" column="bno"/>
 		<result property="bcontent" column="bcontent"/>
+		<result property="likecnt" column="likecnt"/>
+		<result property="commentcnt" column="commentcnt"/>
+		<result property="b_reg_dt" column="b_reg_dt"/>
+		 <association property="user"  javaType="com.young.inbyul.user.model.CustomUser" >
+		 	<result property="uno" column="uno"/>
+             <result property="uid" column="uid"/>
+             <result property="uicon" column="uicon"/>
+        </association>
 		
 		<collection property="fileArr" javaType="java.util.ArrayList" column="bno" ofType="com.young.inbyul.board.model.File" select="getfilepath">
        			<result property="fno" column="fno"/>
@@ -105,7 +113,14 @@
 	</select>
 	
 	<select id="getBoard" resultMap="boardContents">
-		select bno, bcontent from board where bno = #{bno}
+		select 
+			board.*,user.uid,user.uicon,user.uno 
+		from 
+			board join user 
+		on 
+			board.uno=user.uno
+		where 
+			board.bno=#{bno}
 	</select>
 	
 	<delete id="deleteBoard">

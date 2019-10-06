@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.young.inbyul.follow">
+
+<insert id="insertFollow">
+	insert into follow (follower_no,following_no) values (#{follower_no},#{following_no})
+</insert>
+
+<delete id="deleteFollow">
+	delete from follow where follower_no = #{follower_no} and following_no = #{following_no} 
+</delete>
+
+</mapper>

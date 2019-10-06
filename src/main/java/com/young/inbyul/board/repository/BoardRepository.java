@@ -43,9 +43,7 @@ public class BoardRepository {
 		return sqlSession.insert(namespace_board + ".insertImage",map);
 	}
 	
-	public List<Integer> getFollowerList(int uno) throws Exception{
-		return sqlSession.selectList(namespace_board + ".getFollowerList",uno);
-	}
+	
 	
 	public List<Board> getBoardList(int uno,Criteria criteria) throws Exception{
 		Map<String,Object> map = new HashMap<>();

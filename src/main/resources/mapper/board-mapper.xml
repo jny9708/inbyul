@@ -86,15 +86,6 @@
 		
 	</insert> 
 	
-	<select id="getFollowerList" resultType="int">
-		select 
-			follower_no 
-		from 
-			follow 
-		where 
-			following_no = #{uno}
-	</select>
-	
 	<select id="getBoardList" resultMap="boardList">
 		 select 
 		 	b.*,u.uid,u.uicon,u.uno,if(isnull(l.bno),0,1) as heart 

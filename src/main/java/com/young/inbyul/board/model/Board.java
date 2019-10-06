@@ -22,6 +22,7 @@ public class Board {
 	Date b_reg_dt;
 	CustomUser user;
 	String timestring;
+	int heart;
 	//Map<String,MultipartFile> files;
 	List<MultipartFile> uploadFileArr;
 	List<FileVO> rmvFileArr;

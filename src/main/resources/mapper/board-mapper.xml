@@ -10,6 +10,7 @@
 		<result property="likecnt" column="likecnt"/>
 		<result property="commentcnt" column="commentcnt"/>
 		<result property="b_reg_dt" column="b_reg_dt"/>
+		<result property="heart" column="heart"/>
 		 <association property="user"  javaType="com.young.inbyul.user.model.CustomUser" >
 		 	<result property="uno" column="uno"/>
              <result property="uid" column="uid"/>
@@ -36,6 +37,7 @@
 		<result property="likecnt" column="likecnt"/>
 		<result property="commentcnt" column="commentcnt"/>
 		<result property="b_reg_dt" column="b_reg_dt"/>
+		<result property="heart" column="heart"/>
 		 <association property="user"  javaType="com.young.inbyul.user.model.CustomUser" >
 		 	<result property="uno" column="uno"/>
              <result property="uid" column="uid"/>
@@ -94,18 +96,30 @@
 	</select>
 	
 	<select id="getBoardList" resultMap="boardList">
-		select 
-			board.*,user.uid,user.uicon,user.uno 
-		from 
-			board join user 
-		on 
-			board.uno=user.uno
-		where 
-			board.uno in (#{uno}
-		<foreach collection="followerList" item="item" index="index" >
-			,#{item}
-		</foreach>	
-			) order by b_reg_dt desc
+		 select 
+		 	b.*,u.uid,u.uicon,u.uno,if(isnull(l.bno),0,1) as heart 
+		 from 
+		 	board b 
+		 join 
+		 	user u 
+		 on 
+		 	b.uno=u.uno
+		 left outer join
+ 		 	(select bno from tbl_like where tbl_like.bno in (
+ 		 		select bno from ((
+ 		 			select bno from board where board.uno in (
+ 		 				select follower_no from follow where following_no = #{uno} union select #{uno} as follower_no
+ 		 			 ) order by b_reg_dt desc limit #{criteria.pageStart},#{criteria.perPageNum}
+ 		 		) as tmp)
+ 		 	 ) and uno =#{uno}
+ 		 	) l
+ 		 on 
+ 		 	b.bno=l.bno 
+ 		 where 
+ 		 	b.uno in (
+ 		 		select follower_no from follow where following_no = #{uno} union select #{uno} as follower_no) 
+ 		 order by 
+ 		 	b_reg_dt desc limit #{criteria.pageStart},#{criteria.perPageNum};
 	</select>
 	
 	<select id="getfilepath" resultType="com.young.inbyul.board.model.FileVO">
@@ -114,11 +128,9 @@
 	
 	<select id="getBoard" resultMap="boardContents">
 		select 
-			board.*,user.uid,user.uicon,user.uno 
+			board.*,user.uid,user.uicon,user.uno, if(isnull((select bno from tbl_like where bno=#{bno} and uno =#{uno})),0,1) as heart 
 		from 
-			board join user 
-		on 
-			board.uno=user.uno
+			board join user on board.uno=user.uno
 		where 
 			board.bno=#{bno}
 	</select>

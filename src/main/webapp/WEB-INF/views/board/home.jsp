@@ -30,6 +30,8 @@
 	var username = '<sec:authentication property="principal.username"/>';
 	var _csrf_name = "${_csrf.headerName}";
 	var _csrf_token = "${_csrf.token}";
+	var page  = 1; 
+	var addbool = true;
 	$(document).ready(function(){
 	    var isRecomendUser = ${isRecomendUser};
 	    var htmls= '';
@@ -87,15 +89,21 @@
 	    }
 	    
 		function showBorList(){
+			var paramData={"page":page};
+			var headers = {"Content-Type" : "application/json"
+				,"X-HTTP-Method-Override" : "POST"
+			  };
 	    	   $.ajax({
           	url:"${getBorListURL}"
           		,type : 'POST'
+          	    , headers: headers
+          		, data : JSON.stringify(paramData)
           		,dataType : 'json'
               	,beforeSend : function(xhr){
               		xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
 	                    	}
           		,success : function(result){
-              		
+              		console.log(result);
           			htmls+='<div>';
 
           			$.each(result,function(){
@@ -163,18 +171,22 @@
 							<!-- 캐러셀 끝 -->
               		}else{
               			<!-- 사진이 한장일 때 -->
-              			htmls+='<img class="content" src="'+ root + this.fileArr[0].file_path + '" alt="...">';
-              			console.log("??");
+              			htmls+='<img class="content" src="'+ root + this.fileArr[0].file_path + '">';
                   	}
 
           			htmls+='<div style="width: 100%;">';
           			htmls+='<div class="foot_f">';                 
           			htmls+='<section class="fun_f">';
           			htmls+='<div class="fun_s">';
-          			htmls+='<a href="#">';
-          			htmls+='<i class="far fa-heart" style="width: 29px; height:29px;"></i>';
+          			htmls+='<a style="cursor:pointer;" id="likebtn' + this.bno + '">';
+          			if(this.heart==1){
+          				htmls+='<i class="fas fa-heart" style="width: 29px; height:29px; color:red;"></i>';
+              		}else{
+              			htmls+='<i class="far fa-heart" style="width: 29px; height:29px; "></i>';
+                  	}
+          			
           			htmls+='</a>'
-          			htmls+='<a href="#">'
+          			htmls+='<a href="' + root + '/boardContent/' + this.bno + '">'
           			htmls+='<i class="far fa-comment" style="width: 29px; height:29px;"></i>'
           			htmls+='</a>';
           			htmls+='<a href="#">';
@@ -183,7 +195,9 @@
           			htmls+='</div>';
           			htmls+='</section>';
           			htmls+='<section class="fun_s">';
-          			htmls+='<span style="font-size:13px; font-weight: bold;">좋아요 '+ this.likecnt +' 개</span>';
+          			htmls+='<span style="font-size:13px; font-weight: bold;">좋아요 ';
+          			htmls+='<span id="likecnt">'+ this.likecnt +'</span>';
+          			htmls+=' 개</span>';
           			htmls+='</section>';
           			htmls+='<section>';
           			htmls+='<div class="fun_s">';
@@ -229,11 +243,37 @@
 
           			$("#loading").empty();
       		      	removem_2();
-      		        $("#add_html").html(htmls);
+      		      	if(page==1){
+      		      		$("#add_html").html(htmls);
+      		      		page+=1;	
+          		    }else{
+              		    if(result.length>0){
+              		    	$("#add_html").append(htmls);
+              		    	page+=1;
+                  		}
+              		    else{
+							addbool=false;
+                  		}
+          		    	
+              		}
+
+      		       	
+      		       	
 	    			}
 
 	    	   });
 		}  
+
+
+		$(window).scroll(function(){   //스크롤이 최하단 으로 내려가면 리스트를 조회하고 page를 증가시킨다.
+		     if($(window).scrollTop() >= $(document).height() - $(window).height()){
+			     if(addbool==true){
+			    	 showBorList();
+				 }
+		    	 
+		     } 
+		});
+	
 	    
 	    $( window ).resize(function() {
 	    	   //창크기 변화 감지
@@ -320,5 +360,6 @@
 	<script src="${root}/resources/js/homeModal.js"></script>
 	<script src="${root}/resources/js/HomeAjax.js"></script>
 	<script src="${root}/resources/js/cmtAjax.js"></script>
+	<script src="${root}/resources/js/likeAjax.js"></script>
 </body>
 </html>

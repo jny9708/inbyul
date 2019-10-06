@@ -1,7 +1,6 @@
 package com.young.inbyul.board.service;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +16,7 @@ import com.young.inbyul.board.model.Board;
 import com.young.inbyul.board.model.FileVO;
 import com.young.inbyul.board.repository.BoardRepository;
 import com.young.inbyul.user.model.CustomUser;
+import com.young.inbyul.util.Criteria;
 import com.young.inbyul.util.FileProcess;
 import com.young.inbyul.util.TimeAgo;
 
@@ -80,9 +80,9 @@ public class BoardService extends FileProcess{
 	
 	  
 	@Transactional
-	public List<Board> getBoardList(int uno) throws Exception{
-		List<Integer> followerList = boardRepository.getFollowerList(uno);
-		List<Board> boardList = boardRepository.getBoardList(uno, followerList);
+	public List<Board> getBoardList(int uno,Criteria criteria) throws Exception{
+		
+		List<Board> boardList = boardRepository.getBoardList(uno,criteria);
 		TimeAgo timeAgo = new TimeAgo();
 		for(Board board : boardList) {
 			String timestring = timeAgo.timeString(board.getB_reg_dt());
@@ -100,8 +100,8 @@ public class BoardService extends FileProcess{
 		boardRepository.deleteBoard(bno);
 	}
 
-	public Board getBoard(int bno) throws Exception{
-		Board board = boardRepository.getBoard(bno);
+	public Board getBoard(int bno, int uno) throws Exception{
+		Board board = boardRepository.getBoard(bno,uno);
 		return board;
 	}
 	

@@ -99,19 +99,24 @@
                                 <div class="foot_f">
                                 <section class="fun_f">
                                     <div class="fun_s">
-                                        <a href="#">
-                                                <i class="far fa-heart" style="width: 29px; height:29px;"></i>
+                                        <a style="cursor:pointer;" id="likebtn${board.bno}">
+                                        	<c:if test="${board.heart eq 1}">
+                                                <i class="fas fa-heart" style="width: 29px; height:29px; color:red;"></i>
+                                            </c:if>
+                                            <c:if test="${board.heart eq 0}">
+                                            	<i class="far fa-heart" style="width: 29px; height:29px;"></i>
+                                            </c:if>
                                         </a>
                                         <a href="#">
                                                 <i class="far fa-comment" style="width: 29px; height:29px;"></i>
                                         </a>
-                                        <a href="$">
+                                        <a href="#">
                                                 <i class="far fa-share-square" style="width: 29px; height:29px;"></i>
                                         </a>
                                     </div>
                                 </section>
                                 <section class="fun_s">
-                                    <span style="font-size:13px; font-weight: bold;">좋아요 ${board.likecnt} 개</span>
+                                    <span style="font-size:13px; font-weight: bold;">좋아요 <span id="likecnt">${board.likecnt}</span> 개</span>
                                 </section>
                                 <section>
                                     <div class="fun_s">
@@ -168,6 +173,7 @@
     <script src="${root}/resources/js/homeModal.js"></script>
 	<script src="${root}/resources/js/HomeAjax.js"></script>
 	<script src="${root}/resources/js/cmtAjax.js"></script>
+	<script src="${root}/resources/js/likeAjax.js"></script>
 	
     
 </body>

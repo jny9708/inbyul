@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.young.inbyul.board.model.Board;
 import com.young.inbyul.board.model.FileVO;
 import com.young.inbyul.user.model.CustomUser;
+import com.young.inbyul.util.Criteria;
 
 @Repository
 public class BoardRepository {
@@ -46,10 +47,10 @@ public class BoardRepository {
 		return sqlSession.selectList(namespace_board + ".getFollowerList",uno);
 	}
 	
-	public List<Board> getBoardList(int uno, List<Integer> followerList) throws Exception{
+	public List<Board> getBoardList(int uno,Criteria criteria) throws Exception{
 		Map<String,Object> map = new HashMap<>();
 		map.put("uno",uno);
-		map.put("followerList",followerList);
+		map.put("criteria",criteria);
 		return sqlSession.selectList(namespace_board + ".getBoardList", map);
 	}
 	
@@ -57,8 +58,11 @@ public class BoardRepository {
 		return sqlSession.delete(namespace_board + ".deleteBoard",bno);
 	}
 	
-	public Board getBoard(int bno) throws Exception{
-		return sqlSession.selectOne(namespace_board + ".getBoard",bno);
+	public Board getBoard(int bno,int uno) throws Exception{
+		Map<String,Object> map = new HashMap<>();
+		map.put("uno",uno);
+		map.put("bno",bno);
+		return sqlSession.selectOne(namespace_board + ".getBoard",map);
 	}
 	
 	public int updateBoard(Board board) throws Exception{

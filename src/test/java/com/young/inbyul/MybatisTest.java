@@ -1,6 +1,8 @@
 package com.young.inbyul;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -15,6 +17,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.young.inbyul.board.model.Board;
 import com.young.inbyul.config.DatabaseConfig;
 import com.young.inbyul.user.model.CustomUser;
+import com.young.inbyul.util.Criteria;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes=DatabaseConfig.class)
@@ -50,6 +53,28 @@ public class MybatisTest {
 		}
 		
 	}
+	
+	//@Test
+	public void test3() throws Exception{
+		Map<String,Object> map = new HashMap<>();
+		Criteria criteria = new Criteria();
+		map.put("criteria", criteria);
+		map.put("uno", 11);
+		List<Board> list = sqlSession.selectList("com.young.inbyul.test.getBoardList",map);
+		for(Board board : list) {
+			logger.info(board.getHeart()+"");
+		}
+	}
+	
+	@Test
+	public void test4() throws Exception{
+		Map<String,Object> map = new HashMap<>();
+		map.put("bno", 12);
+		map.put("uno", 11);
+		Board board = sqlSession.selectOne("com.young.inbyul.test.getBoard",map);
+		logger.info(board.getHeart()+"");
+	}
+	
 	
 	/*
 	 * @Test public void test3() throws Exception{ List<Board> boardList =

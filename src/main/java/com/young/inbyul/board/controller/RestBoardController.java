@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +18,7 @@ import com.young.inbyul.board.model.Board;
 import com.young.inbyul.board.service.BoardService;
 import com.young.inbyul.user.model.CustomUser;
 import com.young.inbyul.user.model.SecurityCustomUser;
+import com.young.inbyul.util.Criteria;
 
 @RestController
 @RequestMapping("/restboard")
@@ -34,8 +35,8 @@ public class RestBoardController {
 	}
 	
 	@RequestMapping(value="/getBorList" ,method =RequestMethod.POST)
-	public List<Board> getBorList(@AuthenticationPrincipal SecurityCustomUser securityCustomUser) throws Exception{
-		List<Board> list = boardService.getBoardList(securityCustomUser.getUno());
+	public List<Board> getBorList(@AuthenticationPrincipal SecurityCustomUser securityCustomUser, @RequestBody Criteria criteria) throws Exception{
+		List<Board> list = boardService.getBoardList(securityCustomUser.getUno(),criteria);
 		return list;
 	}
 	

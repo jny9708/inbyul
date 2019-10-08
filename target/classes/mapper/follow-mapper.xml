@@ -4,6 +4,15 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.young.inbyul.follow">
 
+<resultMap type="hashMap" id="followList">
+	<result property="presence" column="presence"/>
+	<result property="uno" column="uno"/>
+    <result property="uid" column="uid"/>
+    <result property="uicon" column="uicon"/>
+    <result property="uname" column="uname"/>
+</resultMap>
+
+
 <insert id="insertFollow">
 	insert into follow (follower_no,following_no) values (#{follower_no},#{following_no})
 </insert>
@@ -18,5 +27,17 @@
 	followercnt = case uno when #{follower_no} then followercnt+(#{num}) else followercnt end
 	where uno in (#{following_no},#{follower_no});
 </update>
+
+<select id="getFollowerList" resultMap="followList">
+	<!--조건에 follower_no을 주면 그 사람을 팔로우 하는 사람들의 리스트를 가져온다  -->
+	select u.uno,u.uid,u.uname,u.uicon,if(isnull(f2.follower_no),0,1) as presence from follow f join user u on 
+		f.following_no= u.uno left outer join (select follower_no from follow where following_no=#{uno}) f2 on f.following_no= f2.follower_no where f.follower_no=#{p_uno}
+</select>
+
+<select id="getFollowingList" resultMap="followList">
+<!--조건에 following_no을 주면 그 사람이 팔로우 하는 사람들의 리스트를 가져온다  -->
+	select u.uno,u.uid,u.uname,u.uicon,if(isnull(f2.follower_no),0,1) as presence from follow f join user u on 
+		f.follower_no= u.uno left outer join (select follower_no from follow where following_no=#{uno}) f2 on f.follower_no= f2.follower_no where f.following_no=#{p_uno}
+</select>
 
 </mapper>

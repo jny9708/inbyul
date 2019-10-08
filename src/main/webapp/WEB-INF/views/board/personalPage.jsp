@@ -22,7 +22,7 @@ var _csrf_name = "${_csrf.headerName}";
 var _csrf_token = "${_csrf.token}";
 var page  = 1; 
 var addbool = true;
-var myuno = ${uno};
+var uno = ${uno};
 </script>
 <body>
 	 <section class="m_container">
@@ -82,10 +82,14 @@ var myuno = ${uno};
                                     <span>게시물</span> <span>${user.boardcnt}</span>  
                                 </li>
                                 <li>
-                                    <span>팔로워</span> <span>${user.followercnt}</span>  
+                                	<a href="#" data-toggle="modal" data-target="#followermodal" data-whatever="">
+                                    	<span>팔로워</span> <span id="followercnt">${user.followercnt}</span>  
+                                    </a>
                                 </li>
                                 <li>
-                                    <span>팔로우</span> <span>${user.followingcnt}</span>  
+                                	<a href="#" data-toggle="modal" data-target="#followingmodal" data-whatever="">
+                                    	<span>팔로우</span> <span id="followingcnt">${user.followingcnt}</span>
+                                    </a>  
                                 </li>
                             </ul>
                             <div>
@@ -144,7 +148,54 @@ var myuno = ${uno};
                     </div>
                     </div>
                 </div>
+                
+                
+                  <div class="modal fade" id="followermodal" tabindex="-1" role="dialog" aria-labelledby="followermodal" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="commentmodal">팔로워</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+            
+                                                             
+                          </div>
+                        </div>
+                      </div>
+                </div>
+
+                <div class="modal fade" id="followingmodal" tabindex="-1" role="dialog" aria-labelledby="followingmodal" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="commentmodal">팔로우</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+            
+                                    
+                          </div>
+                        </div>
+                      </div>
+                </div>
+                
+                
+                
 	<script src="${root}/resources/js/personalAjax.js"></script>
+	<script src="${root}/resources/js/followModal.js"></script>
+	<script>
+	var p_uno_id = $(".m_container").find(".idfont").attr("id");
+	 var p_uno = p_uno_id.replace(/[^0-9]/g,'');
+		$(document).ready(function(){
+			uid= $.trim($(".idfont").text());
+			getPersonalBoard(uid);
+		});
+	</script>
 
 </body>
 </html>

@@ -72,7 +72,7 @@
              		            htmls+='</div>';
              		            htmls+='</div>';
              		            htmls+='<div class="u-list-s">';
-             		            htmls+='<button class="btn" >팔로우</button>';
+             		            htmls+='<button class="btn follow_btn" id="number'+this.uno+'">팔로우</button>';
              		            htmls+='</div>';
              		            htmls+='</div>';
              		       })
@@ -308,7 +308,9 @@
                 <div class="m_2" style="display:none;" id="m_2">   
                     <div class="info_f">
                         <div class="info_s">
+                        	<a href="${root}/user/<sec:authentication property="principal.username"/>">
                             <img src="${pageContext.request.contextPath}/resources/images/<sec:authentication property="principal.uicon"/>" style="width: 50px; height:50px;" >
+                            </a>
                         </div>
                         <div class="info_s">
                             <div class="info_t">
@@ -363,5 +365,7 @@
 	<script src="${root}/resources/js/HomeAjax.js"></script>
 	<script src="${root}/resources/js/cmtAjax.js"></script>
 	<script src="${root}/resources/js/likeAjax.js"></script>
+	<script src="${root}/resources/js/personalAjax.js"></script>
+	<script src="${root}/resources/js/followModal.js"></script>
 </body>
 </html>

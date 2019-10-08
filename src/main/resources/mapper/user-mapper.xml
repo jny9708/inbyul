@@ -29,7 +29,7 @@
 	<select id="getReUserList" resultType="com.young.inbyul.user.model.CustomUser">
 	
 		 select 
-		 	uicon,uid,uname 
+		 	uicon,uid,uname,uno
 		 from 
 		 	user 
 		 where 

@@ -1,6 +1,6 @@
 package com.young.inbyul;
 
-import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +18,7 @@ import com.young.inbyul.config.DatabaseConfig;
 import com.young.inbyul.config.RootConfig;
 import com.young.inbyul.config.WebConfig;
 import com.young.inbyul.config.WebSecurityConfig;
+import com.young.inbyul.follow.service.FollowService;
 import com.young.inbyul.util.Criteria;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -27,6 +28,9 @@ public class FileTest {
 	
 	@Autowired
 	BoardService boardService;
+	
+	@Autowired
+	FollowService  FollowService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(FileTest.class);
 	
@@ -39,13 +43,25 @@ public class FileTest {
 	
 	}
 	
-	@Test
+	//@Test
 	public void test6() throws Exception{
 		Criteria criteria = new Criteria();
 		List<Map<String,Object>> list = boardService.getPersonalBoard("skdud5606", criteria);
 		for(Map<String,Object> map : list) {
 			logger.info(map.get("bno")+"");
 			logger.info(map.get("file_path")+"");
+		}
+		
+	}
+	
+	@Test
+	public void test7() throws Exception{
+		
+		List<Map<String,Object>> list = FollowService.getFollowingList(15, 15);
+		for(Map<String,Object> map : list) {
+			logger.info(map.get("uno")+"");
+			logger.info(map.get("uname")+"");
+			logger.info(map.get("presence")+"");
 		}
 		
 	}

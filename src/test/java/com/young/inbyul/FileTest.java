@@ -1,6 +1,8 @@
 package com.young.inbyul;
 
 import java.io.File;
+import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +18,7 @@ import com.young.inbyul.config.DatabaseConfig;
 import com.young.inbyul.config.RootConfig;
 import com.young.inbyul.config.WebConfig;
 import com.young.inbyul.config.WebSecurityConfig;
+import com.young.inbyul.util.Criteria;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes= {RootConfig.class,WebConfig.class,DatabaseConfig.class,WebSecurityConfig.class})
@@ -27,13 +30,24 @@ public class FileTest {
 	
 	private static final Logger logger = LoggerFactory.getLogger(FileTest.class);
 	
-	@Test
+	//@Test
 	public void test() throws Exception{
 		String path = "C:\\javaide\\spring-tool-suite-4-4.3.1.RELEASE-e4.12.0-win32.win32.x86_64\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\inbyul\\resources\\images\\postimages";
 		
 		
 		logger.info(path.substring(path.lastIndexOf("\\resources")));
 	
+	}
+	
+	@Test
+	public void test6() throws Exception{
+		Criteria criteria = new Criteria();
+		List<Map<String,Object>> list = boardService.getPersonalBoard("skdud5606", criteria);
+		for(Map<String,Object> map : list) {
+			logger.info(map.get("bno")+"");
+			logger.info(map.get("file_path")+"");
+		}
+		
 	}
 	
 //	@Test

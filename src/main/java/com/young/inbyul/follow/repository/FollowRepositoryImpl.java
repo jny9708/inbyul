@@ -32,4 +32,14 @@ public class FollowRepositoryImpl implements FollowRepository{
 		
 	}
 
+	@Override
+	public void updateFollowCnt(int follower_no, int following_no, int num) throws Exception {
+		Map<String,Object> map = new HashMap<>();
+		map.put("follower_no", follower_no);
+		map.put("following_no", following_no);
+		map.put("num", num);
+		sqlSession.delete(namespace + ".updateFollowCnt",map);
+		
+	}
+
 }

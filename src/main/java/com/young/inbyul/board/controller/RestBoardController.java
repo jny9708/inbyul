@@ -1,6 +1,7 @@
 package com.young.inbyul.board.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -64,5 +66,9 @@ public class RestBoardController {
 		return 1;
 	}
 	
+	@RequestMapping(value="/{uid}",method=RequestMethod.POST)
+	public List<Map<String,Object>> getPersonalBoard(@PathVariable String uid ,@RequestBody Criteria criteria) throws Exception{
+		return boardService.getPersonalBoard(uid, criteria);
+	}
 	
 }

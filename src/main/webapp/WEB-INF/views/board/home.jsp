@@ -61,7 +61,9 @@
              		       $.each(result,function(){
              		            htmls+='<div class="u-list-f">';
              		            htmls+='<div class="u-list-s">';
+             		           	htmls+='<a href="'+ root+'/user/'+ this.uid +'">'		            
              		            htmls+='<img src="${pageContext.request.contextPath}/resources/images/' + this.uicon + '" style="width: 44px; height:44px;" >';
+             		           	htmls+='</a>';
              		            htmls+='</div>';
              		            htmls+='<div class="u-list-s">';
              		            htmls+='<div>';
@@ -112,7 +114,7 @@
           			htmls+='<div class="hea_f">';	  
           			htmls+='<div class="hea_s">';                              
           			htmls+='<div class="hea_t">';
-          			htmls+='<a href="#">';
+          			htmls+='<a href="'+ root+'/user/'+ this.user.uid +'">';
           			htmls+='<img src="${pageContext.request.contextPath}/resources/images/' + this.user.uicon + '" width="32px" height="32px"></img>';
           			htmls+='</a>';
           			htmls+='</div>';

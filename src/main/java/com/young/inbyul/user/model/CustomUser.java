@@ -21,6 +21,7 @@ public class CustomUser {
 	
 	public int followercnt;
 	public int followingcnt;
+	public int boardcnt;
 	
 	
 

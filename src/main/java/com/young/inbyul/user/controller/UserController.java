@@ -6,13 +6,17 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.young.inbyul.user.model.CustomUser;
+import com.young.inbyul.user.model.SecurityCustomUser;
 import com.young.inbyul.user.service.CustomUserDetailsService;
 
 @Controller
@@ -64,8 +68,24 @@ public class UserController {
 		}
 		
 		return "redirect:/";
-		
-		
+	}
+	
+	@RequestMapping(value="/{uid}",method=RequestMethod.GET)
+	public String personalBoard(@PathVariable String uid ,Model model,@AuthenticationPrincipal SecurityCustomUser securityCustomUser) throws Exception{
+			CustomUser customUser = customUserDetailsService.getUserData(uid); 	
+			
+			boolean userauth = false;
+			int followpresence = -1;
+			if(uid.equals(securityCustomUser.getUsername())) {
+				userauth = true;
+				model.addAttribute("userauth", userauth);
+			}else {
+				followpresence = customUserDetailsService.getFollowPresence(uid, securityCustomUser.getUno());
+				model.addAttribute("followpresence", followpresence);
+				}
+			
+		model.addAttribute("user", customUser);
+		return "/board/personalPage";
 	}
 	
 	

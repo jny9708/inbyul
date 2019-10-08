@@ -76,4 +76,11 @@ public class BoardRepository {
 		return sqlSession.selectList(namespace_board+".getfilepath",bno);
 	}
 	
+	public List<Map<String,Object>> getPersonalBoard(String uid,Criteria criteria) throws Exception{
+		Map<String,Object> map = new HashMap<>();
+		map.put("uid", uid);
+		map.put("criteria", criteria);
+		return sqlSession.selectList(namespace_board + ".getPersonalBoard",map);
+	}
+	
 }

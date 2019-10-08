@@ -4,7 +4,19 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.young.inbyul.user">
 
-
+	<resultMap type="com.young.inbyul.user.model.CustomUser" id="userData">
+		<result property="uno" column="uno"/>
+		<result property="uid" column="uid"/>
+		<result property="uemail" column="uemail"/>
+		<result property="uphone" column="uphone"/>
+		<result property="uicon" column="uicon"/>
+		<result property="followercnt" column="followercnt"/>
+		<result property="followingcnt" column="followingcnt"/>
+		<result property="boardcnt" column="boardcnt"/>
+		    
+	</resultMap>
+	
+	
 	<select id="getFollowingCount" resultType="int">
 		select 
 			followingcnt 
@@ -24,6 +36,16 @@
 		 	uno != #{uno} 
 		 order by followercnt desc limit 10;
 		
+	</select>
+	
+	<select id="getUserData" resultMap="userData">
+		select 
+			uno,uid,uemail,uphone,uname,uicon,followercnt,followingcnt,(select count(*) as boardcnt from board where uno=user.uno) as boardcnt 
+		from user where uid=#{uid}
+	</select>
+	
+	<select id="getFollowPresence" resultType="int">
+		select #{uno} in (select following_no from follow where follower_no=(select uno from user where uid=#{uid})) as followbool;
 	</select>
 	
 </mapper>

@@ -30,7 +30,7 @@
                         	<div class="hea_f">
                              	<div class="hea_s">
                                 	<div class="hea_t">
-                                    	<a href="#">
+                                    	<a href="${root}/user/${board.user.uid}">
                                         	<img src="${root}/resources/images/${board.user.uicon}" width="32px" height="32px"></img>  
                                         </a>
                                      </div>

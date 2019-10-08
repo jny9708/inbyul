@@ -15,6 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.young.inbyul.board.model.Board;
+import com.young.inbyul.board.service.BoardService;
 import com.young.inbyul.config.DatabaseConfig;
 import com.young.inbyul.user.model.CustomUser;
 import com.young.inbyul.util.Criteria;
@@ -27,6 +28,9 @@ public class MybatisTest {
 	
 	@Inject 
 	private SqlSessionTemplate sqlSession;
+	
+	@Inject
+	private BoardService boardService;
 	
 	
 	//@Test	
@@ -66,7 +70,7 @@ public class MybatisTest {
 		}
 	}
 	
-	@Test
+	//@Test
 	public void test4() throws Exception{
 		Map<String,Object> map = new HashMap<>();
 		map.put("bno", 12);
@@ -75,6 +79,15 @@ public class MybatisTest {
 		logger.info(board.getHeart()+"");
 	}
 	
+	//@Test
+	public void test5() throws Exception{
+		Map<String,Object> map = new HashMap<>();
+		map.put("uid","test"); // 해당페이지 주인의 아이디
+		map.put("uno",15); // 로그인한 사람의 유저번호
+		logger.info(sqlSession.selectOne("com.young.inbyul.user.getFollowPresence",map)+"");
+	}
+	
+
 	
 	/*
 	 * @Test public void test3() throws Exception{ List<Board> boardList =

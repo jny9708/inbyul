@@ -56,10 +56,11 @@
         </association> -->
 	</resultMap>
 	
+	<resultMap type="hashMap" id="personalBoard">
+		<result property="bno" column="bno"/>
+		<result property="file_path" column="file_path"/>
+	</resultMap>
 	
-	
-
-
 
 	<select id="getUserBoardCount" resultType="int">
 		select count(*) from board where uno = #{uno}
@@ -140,5 +141,18 @@
 			#{item.fno}
 		</foreach>
 	</delete>
+	
+	<select id="getPersonalBoard" resultMap="personalBoard">
+		select 
+			p.bno,any_value(p.file_path) as file_path
+		from 
+			board b join postimages p on b.bno=p.bno 
+		where 
+			b.uno=(select uno from user where uid=#{uid}) 
+		group by 
+			p.bno order by b.b_reg_dt desc
+		limit 
+			#{criteria.pageStart},#{criteria.perPageNum}
+	</select>
 	
 </mapper>

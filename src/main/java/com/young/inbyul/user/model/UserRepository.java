@@ -15,6 +15,7 @@ public class UserRepository {
 	private SqlSessionTemplate sqlSession;
 	
 	String namespace = "com.young.inbyul.login";
+	String usernamespace = "com.young.inbyul.user";
 	
 	public CustomUser getUserById(String loginid){
 		Map<String, Object> map = new HashMap<>();
@@ -67,6 +68,17 @@ public class UserRepository {
 	
 	public int getUno(String uid) throws Exception{
 		return sqlSession.selectOne(namespace + ".getUno",uid);
+	}
+	
+	public CustomUser getUserData(String uid) throws Exception{
+		return sqlSession.selectOne(usernamespace + ".getUserData", uid);
+	}
+	
+	public int getFollowPresence(String uid, int uno) throws Exception{
+		Map<String,Object> map = new HashMap<>();
+		map.put("uid",uid); // 해당페이지 주인의 아이디
+		map.put("uno",uno); // 로그인한 사람의 유저번호
+		return sqlSession.selectOne(usernamespace + ".getFollowPresence",map);
 	}
 	
 }

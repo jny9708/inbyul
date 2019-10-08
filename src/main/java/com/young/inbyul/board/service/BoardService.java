@@ -123,10 +123,11 @@ public class BoardService extends FileProcess{
 				removeFileToLocalDisk(rmvFile.getFile_path(),getDestinationLocation());
 			}
 		}
-
-
 	}
 	
-	
+	public List<Map<String,Object>> getPersonalBoard(String uid, Criteria criteria) throws Exception{
+	   return boardRepository.getPersonalBoard(uid, criteria);	
+	}
+
 	
 }

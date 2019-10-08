@@ -164,4 +164,12 @@ public class CustomUserDetailsService implements UserDetailsService {
 		}
 		return result;
 	}
+	public CustomUser getUserData(String uid) throws Exception{
+		return userRepository.getUserData(uid);
+	}
+	
+	public int getFollowPresence(String uid, int uno) throws Exception{
+		return userRepository.getFollowPresence(uid, uno);
+	}
+	
 }

@@ -12,4 +12,11 @@
 	delete from follow where follower_no = #{follower_no} and following_no = #{following_no} 
 </delete>
 
+<update id="updateFollowCnt">
+	update user set 
+	followingcnt = case uno when #{following_no} then followingcnt+(#{num}) else followingcnt end,
+	followercnt = case uno when #{follower_no} then followercnt+(#{num}) else followercnt end
+	where uno in (#{following_no},#{follower_no});
+</update>
+
 </mapper>

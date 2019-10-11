@@ -30,12 +30,12 @@
                         	<div class="hea_f">
                              	<div class="hea_s">
                                 	<div class="hea_t">
-                                    	<a href="${root}/user/${board.user.uid}">
+                                    	<a href="${root}/${board.user.uid}">
                                         	<img src="${root}/resources/images/${board.user.uicon}" width="32px" height="32px"></img>  
                                         </a>
                                      </div>
                                     <div class="hea_t">
-                                    	<span>${board.user.uid}</span>
+                                    	<span class="boardwriter">${board.user.uid}</span>
                                     </div>
                                     
                                     <div class="hea_t">

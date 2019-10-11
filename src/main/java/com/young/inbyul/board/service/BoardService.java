@@ -46,7 +46,7 @@ public class BoardService extends FileProcess{
 		
 	}
 	
-	public List<CustomUser> getReUser(int uno) throws Exception{
+	public List<Map<String,Object>> getReUser(int uno) throws Exception{
 		return boardRepository.getReUseList(uno);
 	}
 	

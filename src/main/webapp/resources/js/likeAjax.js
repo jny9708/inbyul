@@ -9,6 +9,8 @@
 		   var child = e.target;
 	       var liketype = $(child).attr("data-prefix");   
 	   }
+	   
+	   var boardwriter = $(target).closest("article.art_f").find(".boardwriter").text()
        var type = targetid.replace(/([^A-Za-z]){0,}/g,'');
        var bno = targetid.replace(/[^0-9]/g,'');
        
@@ -21,6 +23,7 @@
        console.log(liketype);
                
         bno *=1;
+        
        // data-prefix
        if(liketype=='far'){
     	   console.log(bno+"r");
@@ -29,7 +32,8 @@
 			var parent = child.parentElement.parentElement.parentElement.parentElement;
 			var likecnt = $(parent).find(".fun_s span #likecnt").text()*1;
 			$(parent).find(".fun_s span #likecnt").text(likecnt+1);
-    	   	insertlike(bno,child);
+			
+    	   	insertlike(bno,child,boardwriter);
        }else if (liketype=='fas'){
     	   console.log(bno+"s");
     	   $(child).attr("data-prefix","far");
@@ -43,7 +47,7 @@
 });
 
 
-function insertlike(bno,child){
+function insertlike(bno,child,boardwriter){
 	$.ajax({
 		url: root+"/like/insert?bno="+bno
 		,type:'POST'
@@ -51,7 +55,8 @@ function insertlike(bno,child){
          		xhr.setRequestHeader(_csrf_name, _csrf_token);
           }
 		, success: function(result){
-			
+			var socketData = JSON.stringify({"cmd":"like","sender":username,"recipient":boardwriter,"target" : bno});
+			socket.send(socketData);
 		  }
 		, error: function(request,status,error){
 				console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);

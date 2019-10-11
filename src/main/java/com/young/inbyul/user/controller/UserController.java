@@ -70,25 +70,6 @@ public class UserController {
 		return "redirect:/";
 	}
 	
-	@RequestMapping(value="/{uid}",method=RequestMethod.GET)
-	public String personalBoard(@PathVariable String uid ,Model model,@AuthenticationPrincipal SecurityCustomUser securityCustomUser) throws Exception{
-			CustomUser customUser = customUserDetailsService.getUserData(uid); 	
-			
-			boolean userauth = false;
-			int followpresence = -1;
-			if(uid.equals(securityCustomUser.getUsername())) {
-				userauth = true;
-				model.addAttribute("userauth", userauth);
-			}else {
-				followpresence = customUserDetailsService.getFollowPresence(uid, securityCustomUser.getUno());
-				model.addAttribute("followpresence", followpresence);
-				}
-			
-		model.addAttribute("user", customUser);
-		return "/board/personalPage";
-	}
 	
-	
-	 
 	
 }

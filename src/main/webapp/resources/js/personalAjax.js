@@ -32,7 +32,9 @@ $(window).on( 'resize', function () {
 		var follower_no_id = $(".m_container").find(".idfont").attr("id");
 		var follower_no = follower_no_id.replace(/[^0-9]/g,'');
 		var type = "otherpage"; //로그인한 본인이 아닌 다른 사람의 페이지에서 그 사람을 팔로우 했을때
-		insertfollow(follower_no,uno,type);
+		
+		var recipient = $.trim($(e.target).closest(".s-f").find(".idfont").text());
+		insertfollow(follower_no,uno,type,recipient);
 	});
 
 
@@ -86,7 +88,7 @@ function getPersonalBoard(uid){
 
 
 
-function insertfollow(follower_no,following_no,type) {
+function insertfollow(follower_no,following_no,type,recipient) {
 	
 	$.ajax({
 		  url: root+"/follow/insert?follower_no="+follower_no+"&following_no="+following_no
@@ -107,6 +109,8 @@ function insertfollow(follower_no,following_no,type) {
 					    $("#addbtn").html(htmls);
 					    var cnt = ($("#followercnt").text()*1)+1;
 					    $("#followercnt").text(cnt);
+					    var socketData = JSON.stringify({"cmd":"follow","sender":username,"recipient":recipient,"target" : 0});
+	    				socket.send(socketData);
 				  }
 				  
 			  }
@@ -222,13 +226,13 @@ function makefollowlisthtml(result){
 		  
 	  htmls+='<div class="u-list-f">';
 	  htmls+='<div class="u-list-s">';
-	  htmls+='<a href="'+ root +'/user/'+this.uid +'">';
+	  htmls+='<a href="'+ root +'/'+this.uid +'">';
 	  htmls+='<img src="'+root+'/resources/images/'+ this.uicon+'" style="width: 44px; height:44px;" >';
 	  htmls+='</a>';      
 	  htmls+='</div>';
 	  htmls+='<div class="u-list-s">';
 	  htmls+='<div>';
-	  htmls+='<span style="font-weight: bold; color:#404040">'+ this.uid +'</span>';
+	  htmls+='<span class="followid" style="font-weight: bold; color:#404040">'+ this.uid +'</span>';
 	  htmls+='<span>'+ this.uname +'</span>';
 	  htmls+='</div>';
 	  htmls+='</div>';

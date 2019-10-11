@@ -32,7 +32,7 @@ public class RestBoardController {
 	private BoardService boardService;
 	
 	@RequestMapping(value="/getReList" ,method =RequestMethod.POST)
-	public List<CustomUser> getReList(@AuthenticationPrincipal SecurityCustomUser securityCustomUser) throws Exception{
+	public List<Map<String,Object>> getReList(@AuthenticationPrincipal SecurityCustomUser securityCustomUser) throws Exception{
 		return boardService.getReUser(securityCustomUser.getUno());
 	}
 	

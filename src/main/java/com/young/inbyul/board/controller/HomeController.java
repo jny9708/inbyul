@@ -26,6 +26,7 @@ public class HomeController {
 		//유저 추천을 해줘야하는가?
 		boolean isRecomendUser = boardService.checkRecommendUser(securityCustomUser.getUno());
 		model.addAttribute("isRecomendUser", isRecomendUser);
+		
 		return "board/home";
 	}
 	

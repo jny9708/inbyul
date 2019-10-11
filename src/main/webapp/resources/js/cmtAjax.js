@@ -1,6 +1,6 @@
 
 
-function insertcmt(paramData,type){
+function insertcmt(paramData,type,boardwriter){
 	 var headers = {"Content-Type" : "application/json"
 			,"X-HTTP-Method-Override" : "POST"
 		  };
@@ -24,14 +24,16 @@ function insertcmt(paramData,type){
     				htmls+='</div>';
     	       		
     				
-    				if(type=='cmt_bno'){
+    				if(type=='sbm'){
     					$("#addcmtlayout"+paramData.bno).html(htmls);
     					document.getElementById("cmt_bno"+paramData.bno).value='';
     				}else{
     					document.getElementById("m_cmt_bno"+paramData.bno).value='';
     				}
-    				
+    				var socketData = JSON.stringify({"cmd":"comment","sender":username,"recipient":boardwriter,"target" : paramData.bno});
+    				socket.send(socketData);
  				 showcmtlist(paramData.bno);
+ 				
  			    }
 
  			  , error: function(request,status,error){

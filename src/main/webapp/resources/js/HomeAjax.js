@@ -1,10 +1,17 @@
 $(document).on("click",".c_sbm_btn",function(e){
-	 var targetid = e.target.id;
+	var target = e.target;
+	
+	 var targetid = target.id;
 	 var type = targetid.replace(/([^A-Za-z]){0,}/g,'');
      var bno=targetid.replace(/[^0-9]/g,'');
+    
+     
+    var boardwriter = $(target).closest("article.art_f").find(".boardwriter").text();
+    console.log(boardwriter);
+ 
      bno *=1;
      uno *=1;
-     if(type=='cmt_bno'){
+     if(type=='sbm'){
     	 var ccontent = document.getElementById("cmt_bno"+bno).value;
      }else{
     	 var ccontent = document.getElementById("m_cmt_bno"+bno).value;
@@ -22,7 +29,7 @@ $(document).on("click",".c_sbm_btn",function(e){
              confirmButtonText: 'OK'
              });
      }else{
-    	 insertcmt(paramData,type);
+    	 insertcmt(paramData,type,boardwriter);
      }
 	  
 });

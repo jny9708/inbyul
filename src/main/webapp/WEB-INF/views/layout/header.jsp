@@ -19,6 +19,57 @@
     
     <title>INBYUL</title>
 </head>
+	<script>
+	var socket = null;
+	$(document).ready( function() {
+	    connectWS();	
+	});
+	function connectWS() {
+	    console.log("tttttttttttttt")
+	    var ws = new WebSocket("ws://localhost:8080"+root+"/echo/websocket");
+	    socket = ws;
+	    ws.onopen = function () {
+	        console.log('Info: connection opened.');
+	    };
+	    ws.onmessage = function (event) {
+		    var json = JSON.parse(event.data);
+		    var htmls='';
+		    
+		    if(json.cmd=='comment'){
+	            htmls+='<div>';
+	            htmls+= json.sender+'님이 '+ json.recipient +'님의 <a href="${pageContext.request.contextPath}/boardContent/'+ json.target +'">'+ json.target+'번</a> 게시글에 댓글을 남겼습니다.';
+	            htmls+='</div>';
+	            $(".notice").html(htmls);
+	            $(".notice").addClass("alert alert-success");
+	          	
+			 }else if(json.cmd=='follow'){
+				 htmls+='<div>';
+		            htmls+= json.notice.sender+'님이 '+ json.notice.recipient +'님을 팔로우하였습니다.';
+		            htmls+='</div>';
+		            $(".notice").html(htmls);
+		            $(".notice").addClass("alert alert-success");
+			}else if(json.cmd=='like'){
+				htmls+='<div>';
+	            htmls+= json.sender+'님이 '+ json.recipient +'님의 <a href="${pageContext.request.contextPath}/boardContent/'+ json.target +'">'+ json.target+'번</a> 게시글을 좋아합니다.';
+	            htmls+='</div>';
+	            $(".notice").html(htmls);
+	            $(".notice").addClass("alert alert-success");
+			}
+		
+            setTimeout('alertremove()', 3000);
+	    };
+	    ws.onclose = function (event) { 
+	        console.log('Info: connection closed.');
+	        //setTimeout( function(){ connect(); }, 1000); // retry connection!!
+	    };
+	    ws.onerror = function (err) { console.log('Error:', err); };
+	}
+
+	function alertremove(){
+        $(".notice div").remove()
+        $(".notice").removeClass("alert alert-success");
+    }
+	</script>
 <body>
 	<header>
     <div class="f_bar">
@@ -36,16 +87,21 @@
                 <a href="#">
                     <i class="far fa-compass fa-2x"></i>
                 </a>
-                <a href="#">
+                <a href="notice">
                     <i class="far fa-heart fa-2x"></i>
+                    <span></span>
                 </a>
-                <a href="${pageContext.request.contextPath}/user/${username}">
+                <a href="${pageContext.request.contextPath}/${username}">
                     <i class="far fa-user fa-2x"></i>
                 </a>
                 
             </div>
 
         </div>
+    </div>
+    
+    <div class="notice">
+
     </div>
     </div>
     </header>

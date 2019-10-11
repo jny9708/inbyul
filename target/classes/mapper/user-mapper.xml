@@ -16,6 +16,14 @@
 		    
 	</resultMap>
 	
+	<resultMap type="hashMap" id="followList">
+	<result property="presence" column="presence"/>
+	<result property="uno" column="uno"/>
+    <result property="uid" column="uid"/>
+    <result property="uicon" column="uicon"/>
+    <result property="uname" column="uname"/>
+</resultMap>
+	
 	
 	<select id="getFollowingCount" resultType="int">
 		select 
@@ -26,15 +34,11 @@
 	</select>
 	
 	
-	<select id="getReUserList" resultType="com.young.inbyul.user.model.CustomUser">
+	<select id="getReUserList" resultMap="followList">
 	
-		 select 
-		 	uicon,uid,uname,uno
-		 from 
-		 	user 
-		 where 
-		 	uno != #{uno} 
-		 order by followercnt desc limit 10;
+		 select u.followercnt,u.uicon,u.uid,u.uname,u.uno,if(isnull(f.follower_no),0,1) as presence 
+		 	from user u left outer join (select follower_no from follow where following_no=#{uid}) f 
+		 	on f.follower_no=u.uno where u.uno!=#{uid} order by u.followercnt desc limit 10;
 		
 	</select>
 	

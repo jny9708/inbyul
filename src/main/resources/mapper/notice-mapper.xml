@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.young.inbyul.notice">
+
+	<insert id="insertNotice" parameterType="com.young.inbyul.notice.model.NoticeVO">
+		insert into tbl_notice (cmd,sender,recipient,target) 
+		values(#{cmd},#{sender},#{recipient},#{target});
+	</insert>
+	
+	<update id="updateNotice">
+		update tbl_notice set ntc_read = 1 from ntc_no=#{ntc_no};
+	</update>
+	
+	<select id="getNoticeList" resultType="com.young.inbyul.notice.model.NoticeVO">
+		select * from tbl_notice where recipient = #{uid} order by 
+ 		 	ntc_reg_dt desc limit #{criteria.pageStart},#{criteria.perPageNum};
+	</select>
+	
+	<select id="getUnreadCnt" resultType="int">
+		select count(*) from tbl_notice where recipient = #{uid} and ntc_read = 0 
+	</select>
+</mapper>

@@ -2,8 +2,10 @@ package com.young.inbyul.config;
 
 import javax.servlet.Filter;
 
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
+import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 
@@ -20,7 +22,7 @@ public class SpringWebMvcInitializer extends AbstractAnnotationConfigDispatcherS
 	@Override
 	protected Class<?>[] getServletConfigClasses() {
 		// TODO Auto-generated method stub
-		return new Class<?>[]{WebConfig.class};
+		return new Class<?>[]{WebConfig.class, WebSocketConfig.class};
 	}
 
 	@Override
@@ -37,6 +39,13 @@ public class SpringWebMvcInitializer extends AbstractAnnotationConfigDispatcherS
         encodingFilter.setForceEncoding(true);
         return new Filter[]{encodingFilter,hiddenHttpMethodFilter};
     }
-
+	
+	
+	 @Override
+	    protected DispatcherServlet createDispatcherServlet(WebApplicationContext servletAppContext) {
+	        final DispatcherServlet dispatcherServlet = (DispatcherServlet) super.createDispatcherServlet(servletAppContext);
+	        dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);
+	        return dispatcherServlet;
+	    }
 
 }

@@ -20,6 +20,7 @@
 var root = '${pageContext.request.contextPath}';
 var _csrf_name = "${_csrf.headerName}";
 var _csrf_token = "${_csrf.token}";
+var username = '<sec:authentication property="principal.username"/>';
 var page  = 1; 
 var addbool = true;
 var uno = ${uno};
@@ -135,10 +136,10 @@ var uno = ${uno};
                     <div class="modal-content">
                         
                      <div class="modal-body" style="padding:0px;">
-                            <a href="${root}/logout"  id="follow_cc" class="md_f">
+                            <a href="${root}/logout"  class="md_f">
                                     	로그아웃 하기
                             </a>
-                            <a href="#"  id="follow_cc" class="md_f">
+                            <a href="${root}/notice" class="md_f">
                                     	알림
                             </a>
                             <a href="#" class="md_f" data-dismiss="modal">

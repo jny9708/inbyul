@@ -18,10 +18,13 @@ $('#followingmodal').on('show.bs.modal', function (event) {
 	    $(target).removeClass('follow_btn');
 	    $(target).addClass('follow_cc_btn');
 	    $(target).text("팔로잉");
-	    insertfollow(no,uno);
+	    var recipient = $.trim($(target).closest(".u-list-f").find(".followid").text());
+	    insertfollow(no,uno,'',recipient);
+	    if(p_uno!=null){
 	    if(uno==p_uno){
 	        var cnt = ($("#followingcnt").text()*1)+1
 	        $("#followingcnt").text(cnt);
+	    }
 	    }
 	});
 

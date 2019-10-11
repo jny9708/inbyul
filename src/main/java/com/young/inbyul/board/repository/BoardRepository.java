@@ -30,7 +30,7 @@ public class BoardRepository {
 		return sqlSession.selectOne(namespace_board + ".getUserBoardCount",uno);
 	}
 	
-	public List<CustomUser> getReUseList(int uno) throws Exception{
+	public List<Map<String,Object>> getReUseList(int uno) throws Exception{
 		return sqlSession.selectList(namespace_user + ".getReUserList",uno);
 	}
 	

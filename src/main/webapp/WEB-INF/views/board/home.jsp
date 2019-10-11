@@ -32,63 +32,74 @@
 	var _csrf_token = "${_csrf.token}";
 	var page  = 1; 
 	var addbool = true;
+	var p_uno;
+	
 	$(document).ready(function(){
 	    var isRecomendUser = ${isRecomendUser};
 	    var htmls= '';
 	    if(isRecomendUser){
-	    	 $.ajax({
-             	url:"${getReListURL}"
-             		,type : 'POST'
-             		,dataType : 'json'
-                 	,beforeSend : function(xhr){
-                 		xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
-	                    	}
-             		,success : function(result){
-             			  htmls+='<div class="art_f">';
-             		        htmls+='<div class="n-f">';
-             		        htmls+='<div class="n-s">';
-             		        htmls+='<i class="fas fa-home fa-4x"></i>';
-             		        htmls+='</div>';
-             		        htmls+='<div class="n-s">';
-             		        htmls+='<div><span>Inbyul에 오신 것을 환영합니다.</span></div>';
-             		        htmls+='</div>';
-             		        htmls+='<div class="n-s">';
-             		        htmls+='<div><span>다른 사람을 팔로우하면 피드에서 상대방의 사진을 볼 수 있습니다.</span></div>';
-             		        htmls+='</div>';
-             		        htmls+='</div>';
-             		        htmls+='<div class="u-list-wrap">';
-             		        
-             		       $.each(result,function(){
-             		            htmls+='<div class="u-list-f">';
-             		            htmls+='<div class="u-list-s">';
-             		           	htmls+='<a href="'+ root+'/user/'+ this.uid +'">'		            
-             		            htmls+='<img src="${pageContext.request.contextPath}/resources/images/' + this.uicon + '" style="width: 44px; height:44px;" >';
-             		           	htmls+='</a>';
-             		            htmls+='</div>';
-             		            htmls+='<div class="u-list-s">';
-             		            htmls+='<div>';
-             		            htmls+='<span style="font-weight: bold; color:#404040">' + this.uid + '</span>';
-             		            htmls+='<span>' + this.uname + '</span>';
-             		            htmls+='</div>';
-             		            htmls+='</div>';
-             		            htmls+='<div class="u-list-s">';
-             		            htmls+='<button class="btn follow_btn" id="number'+this.uno+'">팔로우</button>';
-             		            htmls+='</div>';
-             		            htmls+='</div>';
-             		       })
-             		       
-             		        htmls+='</div>';
-             		        htmls+='</div>';
-             		            
-             		        $("#loading").empty();
-             		       	removem_2();
-             		        $("#add_html").html(htmls);
-             			}
-             		
-             })  
+	    	showfirst();
 	    }else{
 	    	showBorList();
 	    }
+
+	    function showfirst(){
+	   	 $.ajax({
+          	url:"${getReListURL}"
+          		,type : 'POST'
+          		,dataType : 'json'
+              	,beforeSend : function(xhr){
+              		xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+	                    	}
+          		,success : function(result){
+          			  htmls+='<div class="art_f">';
+          		        htmls+='<div class="n-f">';
+          		        htmls+='<div class="n-s">';
+          		        htmls+='<i class="fas fa-home fa-4x"></i>';
+          		        htmls+='</div>';
+          		        htmls+='<div class="n-s">';
+          		        htmls+='<div><span>Inbyul에 오신 것을 환영합니다.</span></div>';
+          		        htmls+='</div>';
+          		        htmls+='<div class="n-s">';
+          		        htmls+='<div><span>다른 사람을 팔로우하면 피드에서 상대방의 사진을 볼 수 있습니다.</span></div>';
+          		        htmls+='</div>';
+          		        htmls+='</div>';
+          		        htmls+='<div class="u-list-wrap">';
+          		        
+          		       $.each(result,function(){
+          		            htmls+='<div class="u-list-f">';
+          		            htmls+='<div class="u-list-s">';
+          		           	htmls+='<a href="'+ root+'/'+ this.uid +'">'		            
+          		            htmls+='<img src="${pageContext.request.contextPath}/resources/images/' + this.uicon + '" style="width: 44px; height:44px;" >';
+          		           	htmls+='</a>';
+          		            htmls+='</div>';
+          		            htmls+='<div class="u-list-s">';
+          		            htmls+='<div>';
+          		            htmls+='<span style="font-weight: bold; color:#404040">' + this.uid + '</span>';
+          		            htmls+='<span>' + this.uname + '</span>';
+          		            htmls+='</div>';
+          		            htmls+='</div>';
+          		            htmls+='<div class="u-list-s">';
+          		            if(this.presence==0){
+          		            	htmls+='<button class="btn follow_btn" id="number'+this.uno+'">팔로우</button>';
+              		        }else{
+              		        	htmls+='<button class="btn follow_cc_btn" id="number'+this.uno+'">팔로잉</button>';
+                  		    }
+          		            
+          		            htmls+='</div>';
+          		            htmls+='</div>';
+          		       })
+          		       
+          		        htmls+='</div>';
+          		        htmls+='</div>';
+          		            
+          		        $("#loading").empty();
+          		       	removem_2();
+          		        $("#add_html").html(htmls);
+          			}
+          		
+          })  		
+		}
 	    
 		function showBorList(){
 			var paramData={"page":page};
@@ -106,6 +117,9 @@
 	                    	}
           		,success : function(result){
               		console.log(result);
+              		if(result.length==0&&page==1){
+              			showfirst();
+                  		}
           			htmls+='<div>';
 
           			$.each(result,function(){
@@ -114,12 +128,12 @@
           			htmls+='<div class="hea_f">';	  
           			htmls+='<div class="hea_s">';                              
           			htmls+='<div class="hea_t">';
-          			htmls+='<a href="'+ root+'/user/'+ this.user.uid +'">';
+          			htmls+='<a href="'+ root+'/'+ this.user.uid +'">';
           			htmls+='<img src="${pageContext.request.contextPath}/resources/images/' + this.user.uicon + '" width="32px" height="32px"></img>';
           			htmls+='</a>';
           			htmls+='</div>';
           			htmls+='<div class="hea_t">';
-          			htmls+='<span>' + this.user.uid + '</span>';
+          			htmls+='<span class="boardwriter">' + this.user.uid + '</span>';
           			htmls+='</div>';
 						
           			htmls+='<div class="hea_t">';
@@ -308,7 +322,7 @@
                 <div class="m_2" style="display:none;" id="m_2">   
                     <div class="info_f">
                         <div class="info_s">
-                        	<a href="${root}/user/<sec:authentication property="principal.username"/>">
+                        	<a href="${root}/<sec:authentication property="principal.username"/>">
                             <img src="${pageContext.request.contextPath}/resources/images/<sec:authentication property="principal.uicon"/>" style="width: 50px; height:50px;" >
                             </a>
                         </div>

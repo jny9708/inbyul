@@ -17,6 +17,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.young.inbyul.board.model.Board;
 import com.young.inbyul.board.service.BoardService;
 import com.young.inbyul.config.DatabaseConfig;
+import com.young.inbyul.notice.model.NoticeVO;
 import com.young.inbyul.user.model.CustomUser;
 import com.young.inbyul.util.Criteria;
 
@@ -29,8 +30,7 @@ public class MybatisTest {
 	@Inject 
 	private SqlSessionTemplate sqlSession;
 	
-	@Inject
-	private BoardService boardService;
+	
 	
 	
 	//@Test	
@@ -87,7 +87,24 @@ public class MybatisTest {
 		logger.info(sqlSession.selectOne("com.young.inbyul.user.getFollowPresence",map)+"");
 	}
 	
-
+	//@Test
+		public void test6() throws Exception{
+		NoticeVO noticeVO = new NoticeVO();
+		noticeVO.setCmd("follow");
+		noticeVO.setSender("skdud5606");
+		noticeVO.setRecipient("test5");
+		
+			logger.info(sqlSession.selectOne("com.young.inbyul.notice.insertNotice",noticeVO)+"");
+		}
+	
+	@Test
+	public void test7() throws Exception{
+		String uid = "test5";
+		logger.info(sqlSession.selectOne("com.young.inbyul.notice.getUnreadCnt",uid)+"");
+	}
+	
+	
+	
 	
 	/*
 	 * @Test public void test3() throws Exception{ List<Board> boardList =

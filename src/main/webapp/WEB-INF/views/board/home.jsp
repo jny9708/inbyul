@@ -352,7 +352,7 @@
     </section>
 
     <div class="fixed-write">
-            <a href="write.html" style="text-decoration: none; cursor:pointer;"><i class="fas fa-plus-circle fa-4x"></i></a>
+            <a href="${writeFormURL}" style="text-decoration: none; cursor:pointer;"><i class="fas fa-plus-circle fa-4x"></i></a>
     </div>
     
     <jsp:include page="../layout/modalLayout.jsp"></jsp:include>

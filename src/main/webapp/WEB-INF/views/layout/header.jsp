@@ -87,7 +87,7 @@
                 <a href="#">
                     <i class="far fa-compass fa-2x"></i>
                 </a>
-                <a href="notice">
+                <a href="${pageContext.request.contextPath}/notice">
                     <i class="far fa-heart fa-2x"></i>
                     <span></span>
                 </a>

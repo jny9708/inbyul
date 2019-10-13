@@ -1,5 +1,6 @@
 package com.young.inbyul;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,13 +35,14 @@ public class FileTest {
 	
 	private static final Logger logger = LoggerFactory.getLogger(FileTest.class);
 	
-	//@Test
+	@Test
 	public void test() throws Exception{
-		String path = "C:\\javaide\\spring-tool-suite-4-4.3.1.RELEASE-e4.12.0-win32.win32.x86_64\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\inbyul\\resources\\images\\postimages";
+		String path = "/var/webapps/upload/";
 		
-		
-		logger.info(path.substring(path.lastIndexOf("\\resources")));
-	
+		File remakeFile = new File(path, "asdw"); // 저장할 폴더 이름, 저장할 파일 이름
+		String paths = path  + remakeFile.getName();
+		logger.info(path);
+		//paths.substring(paths.lastIndexOf("/resources"));
 	}
 	
 	//@Test
@@ -54,7 +56,7 @@ public class FileTest {
 		
 	}
 	
-	@Test
+	//@Test
 	public void test7() throws Exception{
 		
 		List<Map<String,Object>> list = FollowService.getFollowingList(15, 15);

@@ -1,5 +1,6 @@
 package com.young.inbyul;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +31,16 @@ public class MybatisTest {
 	@Inject 
 	private SqlSessionTemplate sqlSession;
 	
-	
+	@Test
+	public void test565() throws Exception{
+		String path = "/var/webapps/upload/";
+		
+		File remakeFile = new File(path, "asdw"); // 저장할 폴더 이름, 저장할 파일 이름
+		String paths = path  + remakeFile.getName();
+		logger.info(paths);
+		logger.info("/resources/images/postimages/"+remakeFile.getName());
+		//paths.substring(paths.lastIndexOf("/resources"));
+	}
 	
 	
 	//@Test	
@@ -97,7 +107,7 @@ public class MybatisTest {
 			logger.info(sqlSession.selectOne("com.young.inbyul.notice.insertNotice",noticeVO)+"");
 		}
 	
-	@Test
+	//@Test
 	public void test7() throws Exception{
 		String uid = "test5";
 		logger.info(sqlSession.selectOne("com.young.inbyul.notice.getUnreadCnt",uid)+"");

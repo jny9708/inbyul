@@ -123,8 +123,8 @@
                 formData.append("mode", mode);
                
                 if(mode=='modify'){
+                	formData.append("bno", bno);
                     for(var i =0; i<rmvFileArr.length; i++){
-                    	formData.append("bno", bno);
                         formData.append("rmvFileArr["+ i +"].fno", rmvFileArr[i].fno);
                         formData.append("rmvFileArr["+ i +"].file_path", rmvFileArr[i].file_path);
                     }
@@ -150,7 +150,13 @@
             this.on("completemultiple", function(){
             	location.href = root+'/home'
             });
-
+            
+            this.on("removedfile", function(file){
+            	if(fileMap.get(file.name)!=null){
+            		fileMap.delete(file.name)
+            	}
+            });
+            
             
             
         },

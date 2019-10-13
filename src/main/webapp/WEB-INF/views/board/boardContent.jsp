@@ -60,18 +60,18 @@
                         
                         <c:choose>
 						    <c:when test="${fn:length(board.fileArr) > 1}">
-								<div id="article" class="carousel slide carousel_f" data-ride="carousel" data-pause="hover" data-interval="false" data-wrap="false" >
+								<div id="article${board.bno}" class="carousel slide carousel_f" data-ride="carousel" data-pause="hover" data-interval="false" data-wrap="false" >
                         		<div class="carousel-inner">
                         		<c:forEach var="image" items="${board.fileArr}" varStatus="status">
 		                        	<c:choose>
-									    <c:when test="${status eq 0}">
+									    <c:when test="${status.index eq 0}">
 									    	<div class="carousel-item active">
 			                                		<img class="content d-block w-100" src="${root}${image.file_path}" alt="...">
 			                                </div>
 									    </c:when>
 									    <c:otherwise>
 									        <div class="carousel-item">
-			                                		<img class="content d-block w-100" src="${root}${image.file_path}" alt="...">
+			                                		<img class=" d-block w-100" src="${root}${image.file_path}" alt="...">
 			                                </div>
 									    </c:otherwise>
 								    </c:choose>

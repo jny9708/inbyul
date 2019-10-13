@@ -61,7 +61,7 @@ public class BoardService extends FileProcess{
 		for(MultipartFile originFile : board.getUploadFileArr()) {
 			File remakeFile = remakeFile(originFile,getDestinationLocation());
 			saveFileToLocalDisk(originFile, remakeFile);
-
+			logger.info(board.getBno()+"");
 			saveFileToDatabase(remakeFile.getName(),board.getBno());
 		}
 	}

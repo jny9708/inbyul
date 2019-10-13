@@ -3,6 +3,7 @@
 	<name>inbyul</name>
 	<comment></comment>
 	<projects>
+		<project>spring-web-5.1.5.RELEASE</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

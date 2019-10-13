@@ -44,7 +44,7 @@
     
     <insert id="insertRole">
     	
-    		INSERT INTO ROLE (rolename, uno) 
+    		INSERT INTO role (rolename, uno) 
     		VALUES
     		<foreach collection="roles" item="roles" separator="," open="(" close=")">
     		#{roles.rolename},#{uno}
@@ -55,7 +55,7 @@
     
     <insert id="createAuthKey">
     	<![CDATA[
-    		INSERT INTO EMAILAUTH(uno,authkey)
+    		INSERT INTO emailauth(uno,authkey)
     		 VALUES
 	    	(
 	    	#{uno}
@@ -67,28 +67,28 @@
     <select id="getAuthKey" resultType="String">
     	<![CDATA[
     		SELECT 
-    			AUTHKEY 
+    			authkey 
     		FROM 
-    			EMAILAUTH 
+    			emailauth 
     		WHERE
-    			UNO = #{uno} 
+    			uno = #{uno} 
     	]]>
     </select>
     
     <update id="updateRole">
     	<![CDATA[
     		UPDATE
-    			ROLE 
+    			role 
     		SET 
-    			ROLENAME = #{ch_role}
+    			rolename = #{ch_role}
     		WHERE 
-    			UNO= #{uno}
+    			uno= #{uno}
     	]]>
     </update>
     
     <delete id="deleteAuthKey">
     	<![CDATA[
-    		DELETE FROM EMAILAUTH WHERE UNO = #{uno}
+    		DELETE FROM emailauth WHERE uno = #{uno}
     	]]>
     </delete>
     
@@ -97,7 +97,7 @@
     		SELECT 
     			uid 
     		FROM 
-    			USER 
+    			user 
     		WHERE 
     			uid = #{uid}
     	]]>
@@ -108,7 +108,7 @@
 	    	SELECT 
 	    		uemail 
 	    	FROM 
-	    		USER 
+	    		user 
 	    	WHERE 
 	    		uemail = #{uemail}
 	    ]]>
@@ -119,7 +119,7 @@
 	    	SELECT 
 	    		uno 
 	    	FROM 
-	    		USER 
+	    		user 
 	    	WHERE 
 	    		uid = #{uid}
 	    ]]>

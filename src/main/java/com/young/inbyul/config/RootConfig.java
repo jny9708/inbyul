@@ -19,7 +19,7 @@ public class RootConfig {
 		mailsender.setHost("smtp.gmail.com");
 		mailsender.setPort(587);
 		mailsender.setUsername("jny9708@gmail.com");
-		mailsender.setPassword("fz9584fz");
+		mailsender.setPassword("비밀번호비공개");
 		Properties javaMailProperties = new Properties();
 		javaMailProperties.setProperty("mail.transport.protocol", "smtp");
 		javaMailProperties.setProperty("mail.smtp.auth", "true");

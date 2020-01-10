@@ -44,7 +44,8 @@ public class RestBoardController {
 	
 	@RequestMapping(value="/upload", method=RequestMethod.POST)
 	public void upload(@ModelAttribute Board board,HttpServletRequest request) throws Exception{
-		String path = request.getSession().getServletContext().getRealPath("/resources/images/postimages");
+		//path 필요없음 (20.01.10 수정)
+		//String path = request.getSession().getServletContext().getRealPath("/resources/images/postimages");
 		if(request.getParameter("mode").equals("write")) {
 			if(board.getUploadFileArr() != null) {
 				logger.info("write");
